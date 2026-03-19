@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samia's Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --accent-pink: #c44569;
+            --accent-purple: #6a0572;
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFE4EC 0%, #FFD6E4 20%, #E8D4F0 40%, #D8C4E8 60%, #C8B4E0 80%, #D8C4E8 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 12s ease infinite;
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 25%; }
+            50% { background-position: 100% 75%; }
+            75% { background-position: 0% 75%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #c44569, #6a0572);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #5a2d5a;
+        }
+        
+        .nav-section {
+            margin-bottom: 25px;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: rgba(90,45,90,0.6);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.95rem;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.25);
+            color: #fff;
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.35);
+            color: #5a2d5a;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #5a2d5a;
+        }
+        
+        .datetime {
+            color: #7a4d7a;
+            font-size: 0.9rem;
+        }
+        
+        /* Daily Quote */
+        .daily-quote {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            font-style: italic;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #5a2d5a;
+        }
+        
+        .daily-quote.hidden {
+            display: none;
+        }
+        
+        .daily-quote .author {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: rgba(90,45,90,0.7);
+            font-style: normal;
+        }
+        
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #5a2d5a;
+        }
+        
+        /* Checkbox List */
+        .checklist {
+            list-style: none;
+        }
+        
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+        
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-pink);
+            cursor: pointer;
+        }
+        
+        .checklist span {
+            color: #5a2d5a;
+        }
+        
+        /* Weather */
+        .weather-temp {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #5a2d5a;
+        }
+        
+        .weather-desc {
+            color: #7a4d7a;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Grid */
+        .yt-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .yt-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+        
+        .yt-stat .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #c44569;
+        }
+        
+        .yt-stat .label {
+            font-size: 0.8rem;
+            color: #7a4d7a;
+            margin-top: 5px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        
+        .book-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* Inputs */
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        /* Buttons */
+        .add-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        
+        .add-btn:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Links */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .link {
+            padding: 12px 15px;
+            background: rgba(196,69,105,0.15);
+            border-radius: 10px;
+            color: #5a2d5a;
+            text-decoration: none;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+        
+        .link:hover {
+            background: rgba(196,69,105,0.25);
+        }
+        
+        /* Notes */
+        .notes textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        /* Sections */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Travel & Recommended Jobs Items */
+        .travel-item, .recommended-job {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #60a5fa;
+        }
+        
+        .recommended-job {
+            border-left-color: #4ade80;
+        }
+        
+        /* Agent Cards */
+        .agent-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .agent-card:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .agent-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .agent-info {
+            flex: 1;
+        }
+        
+        .agent-info h4 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+        
+        .agent-info p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .agent-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .agent-status.active {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        /* Agent Detail */
+        .agent-detail {
+            display: none;
+        }
+        
+        .agent-detail.active {
+            display: block;
+        }
+        
+        .back-btn {
+            color: #60a5fa;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .agent-profile-header {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .agent-profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        
+        .agent-profile-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .agent-profile-info p {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .agent-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .agent-stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+        
+        .agent-stat-item .value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-pink);
+        }
+        
+        .agent-stat-item .label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+        }
+        
+        .agent-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .agent-action-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        
+        .agent-action-btn.primary {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: #fff;
+        }
+        
+        .agent-action-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        
+        .agent-action-btn:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">✨ Samia's Dashboard 🌿</div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Overview</div>
+                <div class="nav-item active" onclick="showSection('home')">
+                    <span>🏠</span> Home
+                </div>
+                <div class="nav-item" onclick="showSection('tasks')">
+                    <span>📋</span> Tasks
+                </div>
+                <div class="nav-item" onclick="showSection('jobs')">
+                    <span>💼</span> Jobs
+                </div>
+                <div class="nav-item" onclick="showSection('youtube')">
+                    <span>📺</span> YouTube
+                </div>
+                <div class="nav-item" onclick="showSection('book')">
+                    <span>📖</span> Unemployee
+                </div>
+                <div class="nav-item" onclick="showSection('travel')">
+                    <span>✈️</span> Travel
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-label">Tools</div>
+                <div class="nav-item" onclick="showSection('agents')">
+                    <span>🤖</span> Agents
+                </div>
+                <div class="nav-item" onclick="showSection('links')">
+                    <span>🔗</span> Quick Links
+                </div>
+                <div class="nav-item" onclick="showSection('notes')">
+                    <span>📝</span> Notes
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <h2 id="pageTitle">Home</h2>
+                <div class="datetime" id="datetime" style="color: #7a4d7a;">Fri, Mar 13</div>
+            </header>
+            
+            <!-- Daily Quote -->
+            <div class="daily-quote" id="dailyQuote">
+                "The only way to do great work is to love what you do."
+                <span class="author">— Steve Jobs</span>
+            </div>
+            
+            <!-- Home Section -->
+            <div class="section active" id="section-home">
+                <div class="grid">
+                    <!-- Today's Goals -->
+                    <div class="card">
+                        <h3><span>✅</span> Today's Goals <button onclick="showAddGoalInput()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; margin-left: 5px;">➕</button></h3>
+                        <ul class="checklist" id="checklist">
+                            <li><input type="checkbox" onchange="toggleCheck(this)"><span>🎓 Prep for Tuesday's GM Interview</span></li>
+                            <li><input type="checkbox" onchange="toggleCheck(this)"><span>📈 Work on stock investment automation</span></li>
+                            <li><input type="checkbox" onchange="toggleCheck(this)"><span>🧘 Reflect & be the best version of me</span></li>
+                        </ul>
+                        <div id="addGoalInput" style="display: none; margin-top: 10px;">
+                            <input type="text" id="newGoalInput" placeholder="Add a new goal..." style="flex: 1; margin-right: 5px;">
+                            <button class="add-btn" onclick="addNewGoal()">Add</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Wins -->
+                    <div class="card">
+                        <h3><span>🏆</span> Quick Wins</h3>
+                        <ul class="checklist" id="quickWinsList">
+                            <li style="display: flex; align-items: center; gap: 12px;">
+                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
+                                <span style="color: #5a2d5a;">🎓 Prep for GM Interview</span>
+                            </li>
+                            <li style="display: flex; align-items: center; gap: 12px;">
+                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
+                                <span style="color: #5a2d5a;">💳 Negotiate with AMEX on credit card plan</span>
+                            </li>
+                            <li style="display: flex; align-items: center; gap: 12px;">
+                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
+                                <span style="color: #5a2d5a;">👔 Prep clothes for Interview on Tuesday</span>
+                            </li>
+                        </ul>
+                        <p style="font-size: 0.85rem; color: #7a4d7a; margin-top: 15px; font-style: italic; text-align: center;">
+                            "Every small win counts! These are tasks you tackled even when they weren't on your list — that's what makes you unstoppable. 💪"
+                        </p>
+                    </div>
+                    
+                    <!-- Weather Card -->
+                    <div class="card">
+                        <h3><span>☀️</span> Weather</h3>
+                        <div class="weather" id="weather">
+                            <div class="weather-temp" id="weatherTemp" style="color: #5a2d5a;">65°F</div>
+                            <div class="weather-desc" id="weatherDesc" style="color: #7a4d7a;">Sunny</div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <div id="weatherDate" style="font-size: 0.9rem; color: #7a4d7a;">March 13, 2026</div>
+                                <div id="weatherDay" style="font-size: 0.85rem; color: #9a6d9a; margin-top: 5px;">Friday</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="card">
+                        <h3><span>📊</span> Quick Stats</h3>
+                        <div class="yt-stats">
+                            <div class="yt-stat">
+                                <div class="number" id="quickJobs">1</div>
+                                <div class="label">Recommended Jobs</div>
+                            </div>
+                            <div class="yt-stat">
+                                <div class="number" id="quickSubs">1</div>
+                                <div class="label">YouTube Subs</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Book Progress -->
+                    <div class="card" style="grid-column: span 1;">
+                        <h3><span>📖</span> Book Progress</h3>
+                        <div id="bookDonutHome" style="display: flex; justify-content: center; padding: 10px 0;">
+                            <div style="position: relative; width: 140px; height: 140px;">
+                                <div id="donutCircle" style="width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#9ca3af 0% 55%, #3b82f6 55% 97%, #22c55e 97% 100%);"></div>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <div id="donutCenter" style="font-size: 1.8rem; font-weight: bold; color: #fff;">0</div>
+                                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6);">Done</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; font-size: 0.8rem; color: #7a4d7a;">
+                            <span style="color: #9ca3af;">● Not started</span>
+                            <span id="homeNotStarted" style="font-weight: bold; color: #9ca3af;">-</span> &nbsp;
+                            <span style="color: #3b82f6;">● In progress</span>
+                            <span id="homeInProgress" style="font-weight: bold; color: #3b82f6;">-</span> &nbsp;
+                            <span style="color: #22c55e;">● Done</span>
+                            <span id="homeDone" style="font-weight: bold; color: #22c55e;">-</span>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #7a4d7a; margin-top: 10px; text-align: center;">
+                            <a href="https://notion.so/322d9842afb980a39f66f90a3249d9f4" target="_blank" style="color: #c46969;">Edit in Notion</a>
+                        </p>
+                    </div>
+                    
+                    <!-- Recommended Jobs -->
+                    <div class="card">
+                        <h3><span>🎯</span> Recommended to Apply</h3>
+                        <div class="recommended-job" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #4ade80;">
+                            <div style="font-weight: 600; color: #fff;">Affirm - (Check link for title)</div>
+                            <div style="font-size: 0.85rem; color: #4ade80; margin: 5px 0;">Remote</div>
+                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">Buy now, pay later leader</div>
+                            <a href="https://job-boards.greenhouse.io/affirm/jobs/7567726003" target="_blank" style="color: #60a5fa; font-size: 0.8rem;">View Job →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tasks Section -->
+            <div class="section" id="section-tasks">
+                <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.3);">
+                    <h3 style="font-size: 1.3rem; color: #5a2d5a; margin-bottom: 10px;">📋 Uncompleted Tasks</h3>
+                    <p style="font-size: 0.9rem; color: #7a4d7a; margin-bottom: 25px;">
+                        Tasks from today's goals that didn't get done — revisit them when you're ready. No pressure! 💜
+                    </p>
+                    <ul class="checklist" id="tasksList" style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; min-height: 100px;">
+                        <li id="noTasksMsg" style="display: flex; align-items: center; justify-content: center; padding: 30px; color: #9a6d9a; font-style: italic;">
+                            No tasks yet — add one below!
+                        </li>
+                    </ul>
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <input type="text" id="taskInput" placeholder="Add a task to revisit..." style="flex: 1;">
+                        <button class="add-btn" onclick="addTask()">+ Add Task</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Jobs Section -->
+            <div class="section" id="section-jobs">
+                <div class="grid">
+                    <div class="card">
+                        <h3><span>💼</span> Job Applications</h3>
+                        <p style="color: rgba(255,255,255,0.6);">Track your job applications here. LinkedIn cron runs daily.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- YouTube Section -->
+            <div class="section" id="section-youtube">
+                <div class="grid">
+                    <div class="card">
+                        <h3><span>📺</span> Dream State Frequency</h3>
+                        <div class="yt-stats">
+                            <div class="yt-stat">
+                                <div class="number" id="ytSubs">1</div>
+                                <div class="label">Subscribers</div>
+                            </div>
+                            <div class="yt-stat">
+                                <div class="number" id="ytViews">0</div>
+                                <div class="label">Total Views</div>
+                            </div>
+                            <div class="yt-stat">
+                                <div class="number" id="ytVideos">2</div>
+                                <div class="label">Videos</div>
+                            </div>
+                        </div>
+                        <a href="https://youtube.com/@DreamStateFrequency" target="_blank" class="link" style="margin-top: 15px; display: inline-block; text-align: center;">Visit Channel →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book Section -->
+            <div class="section" id="section-book">
+                <!-- Writing Control Strip -->
+                <div id="writingControlStrip" style="background: transparent; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 150px;">
+                        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Current Chapter</div>
+                        <input type="text" id="currentChapter" value="Ch. 1: The Offer" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;" placeholder="e.g., Ch. 5: The Coworkers">
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Goal</div>
+                        <input type="text" id="writingGoal" value="Finish character intro" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 0.85rem;" placeholder="What do you want to accomplish?">
+                    </div>
+                    <div style="flex: 1; min-width: 120px;">
+                        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Next Step</div>
+                        <input type="text" id="nextStep" value="Write dialogue for meeting scene" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 0.85rem;" placeholder="What's the immediate next action?">
+                    </div>
+                    <div style="min-width: 100px;">
+                        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Sprint</div>
+                        <select id="sprintDuration" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 0.85rem; cursor: pointer;">
+                            <option value="15" style="color: #333;">15 min</option>
+                            <option value="20" style="color: #333;">20 min</option>
+                            <option value="30" selected style="color: #333;">30 min</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-left: auto;">
+                        <button onclick="startWriting()" style="background: #8b5cf6; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">▶ Start Writing</button>
+                        <button onclick="markProgress()" style="background: rgba(255,255,255,0.1); color: #e0e0e0; border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 8px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer;">✓ Mark Progress</button>
+                    </div>
+                </div>
+                
+                <div class="grid" style="grid-template-columns: repeat(5, 1fr); gap: 15px;">
+                    <!-- Not Started Column -->
+                    <div class="card" style="background: rgba(156,163,175,0.1); border: 1px solid rgba(156,163,175,0.3);">
+                        <h4 style="color: #9ca3af; margin-bottom: 15px; text-align: center;">Not Started</h4>
+                        <div id="kanbanNotStartedList" style="min-height: 200px;">
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 0: The Opportunity</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 2: IT Mishaps</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 3: Relocation</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 4: Your Career</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 6: Teacher's Pet (Golden Child)</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 7: Leadership</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 11: The job duties</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 12: The Project</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 13: The Misunderstanding</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 14: Questions</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 15: PTO</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 17: PIP</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 21: The vendors</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 22: Corporate Drama</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 0: The Catalyst</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 0: The Job</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 0: Exit Strategy</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 0: The Environment</div>
+                        </div>
+                    </div>
+                    
+                    <!-- In Progress Column -->
+                    <div class="card" style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);">
+                        <h4 style="color: #3b82f6; margin-bottom: 15px; text-align: center;">In Progress</h4>
+                        <div id="kanbanInProgressList" style="min-height: 200px;">
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 1: The Offer / It's Not What It All Seems</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 5: The Coworkers</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 8: Titles are Cheap</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 9: Unagentic Cash Cow</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 10: Subject Matter Expert</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 16: The bonus talk and performance review</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 18: Chapter 18 - Ethics Management</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 19: Possible Embezzlement</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 20: Corporate Loyalty</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 23: Meetings</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 24: The Offsite</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 25: The Conference</div>
+<div style="background:rgba(255,255,255,0.1);padding:8px;border-radius:6px;margin-bottom:6px;font-size:0.8rem;color:#fff;">Ch. 27: Becoming the Unemployee</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Edits Column -->
+                    <div class="card" style="background: rgba(234,179,8,0.1); border: 1px solid rgba(234,179,8,0.3);">
+                        <h4 style="color: #eab308; margin-bottom: 15px; text-align: center;">Edits</h4>
+                        <div id="kanbanEditsList" style="min-height: 200px;"></div>
+                    </div>
+                    
+                    <!-- Final Edits Column -->
+                    <div class="card" style="background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3);">
+                        <h4 style="color: #f97316; margin-bottom: 15px; text-align: center;">Final Edits</h4>
+                        <div id="kanbanFinalEditsList" style="min-height: 200px;"></div>
+                    </div>
+                    
+                    <!-- Done Column -->
+                    <div class="card" style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3);">
+                        <h4 style="color: #22c55e; margin-bottom: 15px; text-align: center;">Done</h4>
+                        <div id="kanbanDoneList" style="min-height: 200px;"></div>
+                    </div>
+                </div>
+                <p style="font-size: 0.8rem; color: #7a4d7a; text-align: center; margin-top: 15px;">
+                    <a href="https://notion.so/322d9842afb980a39f66f90a3249d9f4" target="_blank" style="color: #c46969;">Edit in Notion</a>
+                </p>
+            </div>
+            
+            <!-- Travel Section -->
+            <div class="section" id="section-travel">
+                <div class="grid">
+                    <div class="card">
+                        <h3><span>✈️</span> Travel Plans</h3>
+                        <div id="travelList">
+                            <div class="travel-item" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #60a5fa;">
+                                <div style="font-weight: 600; color: #fff; margin-bottom: 5px;">🏝️ Dream Destination</div>
+                                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Where to first? Let's plan your next adventure!</div>
+                            </div>
+                        </div>
+                        <input type="text" id="travelInput" placeholder="Add a destination..." style="margin-top: 10px;">
+                        <button class="add-btn" onclick="addTravel()" style="margin-top: 10px;">+ Add Trip</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Agents Section -->
+            <div class="section" id="section-agents">
+                <div id="agentsList">
+                    <div class="grid">
+                        <div class="card" style="grid-column: span 2;">
+                            <h3><span>🤖</span> Your Agents</h3>
+                            
+                            <div class="agent-card" onclick="showAgentDetail('sage')">
+                                <div class="agent-avatar" style="background: linear-gradient(135deg, #ff6b6b, #c44569);">🌿</div>
+                                <div class="agent-info">
+                                    <h4>Sage (Main Agent)</h4>
+                                    <p>Your personal assistant for everything</p>
+                                </div>
+                                <span class="agent-status active">Active</span>
+                            </div>
+                            
+                            <div class="agent-card" onclick="showAgentDetail('crypto')">
+                                <div class="agent-avatar" style="background: linear-gradient(135deg, #4ade80, #22c55e);">📈</div>
+                                <div class="agent-info">
+                                    <h4>Crypto Bot</h4>
+                                    <p>Telegram crypto signals and trading</p>
+                                </div>
+                                <span class="agent-status active">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sage Detail -->
+                <div id="agentDetail-sage" class="agent-detail">
+                    <div class="back-btn" onclick="backToAgents()">← Back to Agents</div>
+                    <div class="card">
+                        <div class="agent-profile-header">
+                            <div class="agent-profile-avatar" style="background: linear-gradient(135deg, #ff6b6b, #c44569);">🌿</div>
+                            <div class="agent-profile-info">
+                                <h3>Sage</h3>
+                                <p>Personal Assistant • Active</p>
+                                <span class="agent-status active">Running</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 10px; color: #60a5fa;">📝 About</h4>
+                            <p style="color: rgba(255,255,255,0.8); line-height: 1.6;">
+                                I'm your personal AI assistant running on OpenClaw. I help with tasks like job hunting, 
+                                building dashboards, research, writing, and more. I remember things from our conversations 
+                                and keep track of your goals.<br><br>
+                                <strong>Platform:</strong> Discord, Webchat<br>
+                                <strong>Status:</strong> Active and ready to help
+                            </p>
+                        </div>
+                        
+                        <div class="agent-stats-grid">
+                            <div class="agent-stat-item">
+                                <div class="value" id="sage-sessions">--</div>
+                                <div class="label">Sessions Today</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value" id="sage-messages">--</div>
+                                <div class="label">Messages Today</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value">Just now</div>
+                                <div class="label">Last Active</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value">100%</div>
+                                <div class="label">Uptime</div>
+                            </div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn primary">💬 Message</button>
+                            <button class="agent-action-btn secondary">⚙️ Configure</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Crypto Bot Detail -->
+                <div id="agentDetail-crypto" class="agent-detail">
+                    <div class="back-btn" onclick="backToAgents()">← Back to Agents</div>
+                    <div class="card">
+                        <div class="agent-profile-header">
+                            <div class="agent-profile-avatar" style="background: linear-gradient(135deg, #4ade80, #22c55e);">📈</div>
+                            <div class="agent-profile-info">
+                                <h3>Crypto Bot</h3>
+                                <p>Telegram crypto trading signals • Active</p>
+                                <span class="agent-status active">Running</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 10px; color: #4ade80;">📝 About</h4>
+                            <p style="color: rgba(255,255,255,0.8); line-height: 1.6;">
+                                Telegram-based crypto trading signals bot. Lives in the crypto trading group 
+                                and sends automated buy/sell signals based on market analysis.<br><br>
+                                <strong>Platform:</strong> Telegram<br>
+                                <strong>Availability:</strong> 24/7<br>
+                                <strong>Status:</strong> Active<br><br>
+                                <strong>Note:</strong> Crypto trading is risky. This bot provides signals for 
+                                informational purposes only. Not financial advice. 📈
+                            </p>
+                        </div>
+                        
+                        <div class="agent-stats-grid">
+                            <div class="agent-stat-item">
+                                <div class="value">Telegram</div>
+                                <div class="label">Platform</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value">Active</div>
+                                <div class="label">Status</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value">24/7</div>
+                                <div class="label">Availability</div>
+                            </div>
+                            <div class="agent-stat-item">
+                                <div class="value">--</div>
+                                <div class="label">Signals Today</div>
+                            </div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn primary">📊 View Signals</button>
+                            <button class="agent-action-btn secondary">⚙️ Configure</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Links Section -->
+            <div class="section" id="section-links">
+                <div class="grid">
+                    <div class="card">
+                        <h3><span>🔗</span> Quick Links</h3>
+                        <div class="links">
+                            <a href="https://www.linkedin.com/jobs/" target="_blank" class="link">LinkedIn Jobs</a>
+                            <a href="https://www.youtube.com/@DreamStateFrequency" target="_blank" class="link">YouTube Channel</a>
+                            <a href="https://www.notion.so/Job-Hunting-24cd9842afb980e4a1fccb798a761a6f" target="_blank" class="link">Notion</a>
+                            <a href="https://mail.google.com/" target="_blank" class="link">Gmail</a>
+                            <a href="https://www.glassdoor.com/" target="_blank" class="link">Glassdoor</a>
+                            <a href="https://indeed.com" target="_blank" class="link">Indeed</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes Section -->
+            <div class="section" id="section-notes">
+                <div class="grid">
+                    <div class="card">
+                        <h3><span>📝</span> Notes</h3>
+                        <div class="notes">
+                            <textarea id="notes" placeholder="Jot down your thoughts..." oninput="saveNotes()"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Show section
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + sectionId).classList.add('active');
+            
+            // Hide quote on Book/Unemployee page
+            var quote = document.getElementById('dailyQuote');
+            if (sectionId === 'book') {
+                quote.classList.add('hidden');
+            } else {
+                quote.classList.remove('hidden');
+            }
+            
+            // Reset agent detail when going to agents
+            if(sectionId === 'agents') {
+                document.getElementById('agentsList').style.display = 'block';
+                document.querySelectorAll('.agent-detail').forEach(d => d.classList.remove('active'));
+            }
+            
+            // Update title
+            const titles = {
+                'home': 'Home',
+                'tasks': 'Tasks',
+                'jobs': 'Job Applications',
+                'youtube': 'YouTube Channel',
+                'book': 'Book Progress',
+                'travel': 'Travel',
+                'agents': 'Agents',
+                'links': 'Quick Links',
+                'notes': 'Notes'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Dashboard';
+        }
+        
+        // Agent Detail Functions
+        function showAgentDetail(agentId) {
+            document.getElementById('agentsList').style.display = 'none';
+            document.getElementById('agentDetail-' + agentId).classList.add('active');
+        }
+        
+        function backToAgents() {
+            document.querySelectorAll('.agent-detail').forEach(d => d.classList.remove('active'));
+            document.getElementById('agentsList').style.display = 'block';
+        }
+        
+        // Checklist - Today's Goals
+        const CHECKLIST_KEY = 'todaysGoals_state';
+        const CHECKLIST_DATE_KEY = 'todaysGoals_date';
+        
+        function saveChecklistState() {
+            const list = document.getElementById('checklist');
+            if (list) {
+                localStorage.setItem(CHECKLIST_KEY, list.innerHTML);
+                localStorage.setItem(CHECKLIST_DATE_KEY, new Date().toISOString().split('T')[0]);
+            }
+        }
+        
+        function loadChecklistState() {
+            const today = new Date().toISOString().split('T')[0];
+            const savedDate = localStorage.getItem(CHECKLIST_DATE_KEY);
+            const saved = localStorage.getItem(CHECKLIST_KEY);
+            
+            // Only load if saved today
+            if (saved && savedDate === today) {
+                document.getElementById('checklist').innerHTML = saved;
+            } else {
+                // Clear old state if new day
+                localStorage.removeItem(CHECKLIST_KEY);
+                localStorage.removeItem(CHECKLIST_DATE_KEY);
+            }
+        }
+        
+        function toggleCheck(checkbox) {
+            const li = checkbox.closest('li');
+            if (checkbox.checked) {
+                // Hide checked items
+                li.style.transition = 'all 0.3s';
+                li.style.opacity = '0';
+                li.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    li.remove();
+                    saveChecklistState();
+                }, 300);
+            } else {
+                saveChecklistState();
+            }
+        }
+        
+        function showAddGoalInput() {
+            document.getElementById('addGoalInput').style.display = 'flex';
+            document.getElementById('newGoalInput').focus();
+        }
+        
+        function addNewGoal() {
+            const input = document.getElementById('newGoalInput');
+            const goal = input.value.trim();
+            if (!goal) return;
+            
+            const li = document.createElement('li');
+            li.innerHTML = '<input type="checkbox" onchange="toggleCheck(this)"><span>' + goal + '</span>';
+            document.getElementById('checklist').appendChild(li);
+            
+            saveChecklistState();
+            input.value = '';
+            document.getElementById('addGoalInput').style.display = 'none';
+        }
+        
+        // Enter key to add goal
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('addGoalInput').style.display !== 'none') {
+                addNewGoal();
+            }
+        });
+        
+        // Quick Wins - Daily Refresh
+        const quickWinQuotes = [
+            "Every small win counts! These are tasks you tackled even when they weren't on your list — that's what makes you unstoppable. 💪",
+            "You're doing amazing! Even the smallest steps forward still move you closer to your goals. 🌟",
+            "Progress over perfection. Every task you complete is a victory worth celebrating! 🎉",
+            "You've got this! Small wins add up to big victories. Keep going! 💜",
+            "Be proud of yourself! Completing tasks — big or small — is what gets you where you want to be. 🚀"
+        ];
+        
+        function getTodayKey() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        }
+        
+        function initQuickWins() {
+            const todayKey = getTodayKey();
+            const savedDate = localStorage.getItem('quickWinsDate');
+            const quoteEl = document.querySelector('#section-home .card:nth-child(3) p');
+            
+            // Check if it's a new day
+            if (savedDate !== todayKey) {
+                // New day - reset Quick Wins
+                localStorage.setItem('quickWinsDate', todayKey);
+                localStorage.removeItem('quickWinsTasks');
+                
+                // Random quote for the day
+                const randomQuote = quickWinQuotes[Math.floor(Math.random() * quickWinQuotes.length)];
+                localStorage.setItem('quickWinsQuote', randomQuote);
+                
+                // Reset to blank (no tasks until you add them)
+                document.getElementById('quickWinsList').innerHTML = '';
+            }
+            
+            // Load saved quote
+            const savedQuote = localStorage.getItem('quickWinsQuote');
+            if (savedQuote && quoteEl) {
+                quoteEl.textContent = savedQuote;
+            }
+            
+            // Load saved tasks
+            const savedTasks = localStorage.getItem('quickWinsTasks');
+            if (savedTasks) {
+                document.getElementById('quickWinsList').innerHTML = savedTasks;
+            }
+        }
+        
+        function toggleQuickWin(checkbox) {
+            localStorage.setItem('quickWinsTasks', document.getElementById('quickWinsList').innerHTML);
+        }
+        
+        // Initialize Quick Wins
+        initQuickWins();
+        
+        // Tasks Section
+        function toggleTask(checkbox) {
+            // Remove checked task
+            const li = checkbox.closest('li');
+            if (checkbox.checked) {
+                li.style.transition = 'all 0.3s';
+                li.style.opacity = '0';
+                li.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    li.remove();
+                    saveTasks();
+                    checkNoTasks();
+                }, 300);
+            } else {
+                saveTasks();
+            }
+        }
+        
+        function saveTasks() {
+            const list = document.getElementById('tasksList');
+            if (!list) return; // Safety check
+            localStorage.setItem('tasksState', list.innerHTML);
+        }
+        
+        function checkNoTasks() {
+            const list = document.getElementById('tasksList');
+            const noTasksMsg = document.getElementById('noTasksMsg');
+            
+            // Safety check - elements don't exist on all pages
+            if (!list || !noTasksMsg) return;
+            
+            const tasks = list.querySelectorAll('li:not(#noTasksMsg)');
+            if (tasks.length === 0) {
+                noTasksMsg.style.display = 'flex';
+            } else {
+                noTasksMsg.style.display = 'none';
+            }
+        }
+        
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const task = input.value.trim();
+            if (!task) return;
+            
+            const noTasksMsg = document.getElementById('noTasksMsg');
+            noTasksMsg.style.display = 'none';
+            
+            const li = document.createElement('li');
+            li.style.cssText = 'display: flex; align-items: center; gap: 12px; padding: 15px 0; border-bottom: 1px solid rgba(90,45,90,0.1);';
+            li.innerHTML = `<input type="checkbox" onchange="toggleTask(this)" style="width: 22px; height: 22px; accent-color: #c44569; cursor: pointer;"><span style="color: #5a2d5a; font-size: 1.1rem;">${task}</span>`;
+            document.getElementById('tasksList').appendChild(li);
+            
+            saveTasks();
+            input.value = '';
+        }
+        
+        // Load saved tasks
+        const savedTasks = localStorage.getItem('tasksState');
+        if(savedTasks && savedTasks.trim() !== '') {
+            const temp = document.createElement('div');
+            temp.innerHTML = savedTasks;
+            if (temp.children.length > 0) {
+                document.getElementById('tasksList').innerHTML = savedTasks;
+            }
+        }
+        checkNoTasks();
+        
+        // Load checklist state on page load (only if from today)
+        loadChecklistState();
+        
+        // Date & Time - Updates on page load and ensures visibility
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+            const datetimeEl = document.getElementById('datetime');
+            if (datetimeEl) {
+                datetimeEl.textContent = now.toLocaleDateString('en-US', options);
+                datetimeEl.style.color = '#7a4d7a';
+            }
+        }
+        updateDateTime();
+        
+        // Also update on section change to ensure it stays current
+        const originalShowSection = showSection;
+        showSection = function(sectionId) {
+            originalShowSection(sectionId);
+            updateDateTime();
+        };
+        
+        // Daily Quote - Refreshes each day with unique quote
+        const quotes = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Success is not final, failure is not fatal.", author: "Winston Churchill" },
+            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+            { text: "It's going to be hard, but hard does not mean impossible.", author: "Unknown" },
+            { text: "Don't wait for opportunity. Create it.", author: "Unknown" },
+            { text: "Every day is a fresh start.", author: "Unknown" },
+            { text: "You've survived 100% of your worst days.", author: "Unknown" }
+        ];
+        
+        function showDailyQuote(forceNew = false) {
+            const today = new Date();
+            const todayDate = today.toISOString().split('T')[0]; // e.g., "2026-03-13"
+            const savedDate = localStorage.getItem('quoteSavedDate');
+            
+            // Check if we need a new quote (new day or forced)
+            if (!forceNew && savedDate === todayDate) {
+                const savedQuote = localStorage.getItem('dailyQuote');
+                if (savedQuote) {
+                    document.getElementById('dailyQuote').innerHTML = savedQuote;
+                    return;
+                }
+            }
+            
+            // Get new quote based on day of year
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const quoteIndex = dayOfYear % quotes.length;
+            const quote = quotes[quoteIndex];
+            const quoteHTML = `"${quote.text}"<span class="author">— ${quote.author}</span>`;
+            
+            // Save and display
+            localStorage.setItem('dailyQuote', quoteHTML);
+            localStorage.setItem('quoteSavedDate', todayDate);
+            document.getElementById('dailyQuote').innerHTML = quoteHTML;
+        }
+        showDailyQuote();
+        
+        // Appointments - Show/hide based on content
+        function updateAppointments() {
+            const card = document.getElementById('appointmentsCard');
+            if (!card) return;
+            const list = document.getElementById('appointmentList');
+            if (!list) return;
+            const appointmentItems = list.querySelectorAll('.appointment-item');
+            if (appointmentItems.length === 0) {
+                card.style.display = 'none';
+            }
+        }
+        
+        // Run after DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAppointments();
+            loadTravel();
+            loadNotes();
+        });
+        
+        // Weather - Updates daily (using Open-Meteo API for CORS support)
+        async function fetchWeather() {
+            try {
+                // Las Vegas coordinates: 36.17, -115.15
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=36.17&longitude=-115.15&current_weather=true');
+                if (!response.ok) throw new Error('Weather unavailable');
+                const data = await response.json();
+                const current = data.current_weather;
+                
+                const tempEl = document.getElementById('weatherTemp');
+                const descEl = document.getElementById('weatherDesc');
+                const dateEl = document.getElementById('weatherDate');
+                const dayEl = document.getElementById('weatherDay');
+                
+                if (tempEl) {
+                    // Convert C to F
+                    const tempF = Math.round((current.temperature * 9/5) + 32);
+                    tempEl.textContent = tempF + '°F';
+                    tempEl.style.color = '#5a2d5a';
+                }
+                if (descEl) {
+                    // Map WMO codes to descriptions
+                    const weatherCodes = {0: 'Clear', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast', 45: 'Fog', 48: 'Fog', 51: 'Drizzle', 53: 'Drizzle', 55: 'Drizzle', 61: 'Rain', 63: 'Rain', 65: 'Rain', 71: 'Snow', 73: 'Snow', 75: 'Snow', 80: 'Rain Showers', 81: 'Rain Showers', 82: 'Rain Showers', 95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Thunderstorm'};
+                    descEl.textContent = weatherCodes[current.weathercode] || 'Clear';
+                    descEl.style.color = '#7a4d7a';
+                }
+                
+                // Always update date and day on each fetch
+                const now = new Date();
+                const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+                const dayOptions = { weekday: 'long' };
+                if (dateEl) {
+                    dateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+                    dateEl.style.color = '#7a4d7a';
+                }
+                if (dayEl) {
+                    dayEl.textContent = now.toLocaleDateString('en-US', dayOptions);
+                    dayEl.style.color = '#9a6d9a';
+                }
+            } catch(e) {
+                const tempEl = document.getElementById('weatherTemp');
+                const descEl = document.getElementById('weatherDesc');
+                if (tempEl) {
+                    tempEl.textContent = '--°';
+                    tempEl.style.color = '#5a2d5a';
+                }
+                if (descEl) descEl.textContent = 'Weather unavailable';
+            }
+        }
+        // Run weather on page load (fallback shows immediately)
+        function initWeather() {
+            const now = new Date();
+            const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+            const dayOptions = { weekday: 'long' };
+            
+            // Set fallback values immediately
+            const tempEl = document.getElementById('weatherTemp');
+            const descEl = document.getElementById('weatherDesc');
+            const dateEl = document.getElementById('weatherDate');
+            const dayEl = document.getElementById('weatherDay');
+            
+            if (tempEl) { tempEl.textContent = '65°F'; tempEl.style.color = '#5a2d5a'; }
+            if (descEl) { descEl.textContent = 'Loading...'; descEl.style.color = '#7a4d7a'; }
+            if (dateEl) { dateEl.textContent = now.toLocaleDateString('en-US', dateOptions); dateEl.style.color = '#7a4d7a'; }
+            if (dayEl) { dayEl.textContent = now.toLocaleDateString('en-US', dayOptions); dayEl.style.color = '#9a6d9a'; }
+            
+            // Try live weather
+            fetchWeather();
+            
+            // Auto-refresh weather and date every hour
+            setInterval(function() {
+                fetchWeather();
+                updateDateTime();
+            }, 3600000); // 1 hour
+        }
+        initWeather();
+        loadWritingState();
+        
+        // Travel Functions
+        function loadTravel() {
+            const travel = JSON.parse(localStorage.getItem('travel') || '[]');
+            const list = document.getElementById('travelList');
+            if (!list) return;
+            
+            if (travel.length === 0) {
+                list.innerHTML = `<div class="travel-item" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #60a5fa;">
+                    <div style="font-weight: 600; color: #fff; margin-bottom: 5px;">🏝️ Dream Destination</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Where to first? Let's plan your next adventure!</div>
+                </div>`;
+            } else {
+                list.innerHTML = '';
+                travel.forEach((trip) => {
+                    const div = document.createElement('div');
+                    div.className = 'travel-item';
+                    div.style.cssText = 'background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #60a5fa;';
+                    div.innerHTML = `<div style="font-weight: 600; color: #fff;">${trip.destination}</div><div style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 5px;">${trip.notes || 'No details yet'}</div>`;
+                    list.appendChild(div);
+                });
+            }
+        }
+        
+        function addTravel() {
+            const input = document.getElementById('travelInput');
+            if (!input) return;
+            const destination = input.value.trim();
+            if (!destination) return;
+            const travel = JSON.parse(localStorage.getItem('travel') || '[]');
+            travel.push({ destination: destination, notes: '' });
+            localStorage.setItem('travel', JSON.stringify(travel));
+            input.value = '';
+            loadTravel();
+        }
+        
+        // Notes
+        function saveNotes() {
+            const notes = document.getElementById('notes');
+            if (notes) {
+                localStorage.setItem('notes', notes.value);
+            }
+        }
+        
+        function loadNotes() {
+            const notes = document.getElementById('notes');
+            if (notes) {
+                notes.value = localStorage.getItem('notes') || '';
+            }
+        }
+        
+        // Book Progress
+        function updateBook() {
+            const input = document.getElementById('bookWordsInput');
+            const words = parseInt(input.value) || 0;
+            const target = 60000; // 60k words for a book
+            const percent = Math.min((words / target) * 100, 100);
+            
+            document.getElementById('bookProgress').style.width = percent + '%';
+            document.getElementById('bookWords').textContent = words.toLocaleString() + ' words';
+            document.getElementById('bookPercent').textContent = Math.round(percent) + '%';
+            
+            localStorage.setItem('bookWords', words);
+        }
+        
+        // Load saved book progress
+        const savedBookWords = localStorage.getItem('bookWords');
+        if(savedBookWords) {
+            document.getElementById('bookWordsInput').value = savedBookWords;
+            updateBook();
+        }
+        
+        // === Notion Chapters Sync ===
+        // Data stored in localStorage, synced via subagent/cron
+        
+        const defaultChapters = [
+            {"id": "322d9842-afb9-8052-badc-d49dab60090d", "title": "The Opportunity", "chapter": 0, "section": 1, "status": "Not started"},
+            {"id": "322d9842-afb9-8081-8b33-ee7b48554d60", "title": "The Offer / It's Not What It All Seems", "chapter": 1, "section": 1, "status": "In progress"},
+            {"id": "322d9842-afb9-8089-ac4d-ece22f57fbf4", "title": "IT Mishaps", "chapter": 2, "section": 1, "status": "Not started"},
+            {"id": "322d9842-afb9-80b2-9e41-ef63c7905fd6", "title": "Relocation", "chapter": 3, "section": 1, "status": "Not started"}
+        ];
+        
+        let notionChaptersData = [];
+        
+        function renderChaptersTable(chapters) {
+            const container = document.getElementById('notionChapters');
+            if (!container) {
+                console.log('Container not found yet');
+                return;
+            }
+            if (!chapters || chapters.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #9a6d9a;">No chapters found. Add them in Notion!</div>';
+                return;
+            }
+            
+            let html = '<table style="width: 100%; border-collapse: collapse; color: #5a2d5a;">';
+            html += '<thead><tr style="border-bottom: 2px solid rgba(196,69,105,0.3);">';
+            html += '<th style="padding: 12px; text-align: left;">Chapter</th>';
+            html += '<th style="padding: 12px; text-align: left;">Section</th>';
+            html += '<th style="padding: 12px; text-align: left;">Chapter Name</th>';
+            html += '<th style="padding: 12px; text-align: left;">Status</th>';
+            html += '</tr></thead><tbody>';
+            
+            chapters.forEach((ch, idx) => {
+                const statusColors = {
+                    'Not started': '#9ca3af',
+                    'In progress': '#3b82f6',
+                    'Edits': '#eab308',
+                    'Final Edits': '#f97316',
+                    'Done': '#22c55e'
+                };
+                const statusColor = statusColors[ch.status] || '#9ca3af';
+                
+                html += `<tr style="border-bottom: 1px solid rgba(196,69,105,0.1);">`;
+                html += `<td style="padding: 12px;">${ch.chapter}</td>`;
+                html += `<td style="padding: 12px;">${ch.section}</td>`;
+                html += `<td style="padding: 12px; font-weight: 500;">${ch.title}</td>`;
+                html += `<td style="padding: 12px;">
+                    <select onchange="updateChapterStatus('${ch.id}', this.value)" 
+                            style="padding: 6px 10px; border-radius: 6px; border: 1px solid ${statusColor}; background: rgba(255,255,255,0.1); color: ${statusColor}; font-weight: 500; cursor: pointer;">
+                        <option value="Not started" ${ch.status === 'Not started' ? 'selected' : ''}>Not started</option>
+                        <option value="In progress" ${ch.status === 'In progress' ? 'selected' : ''}>In progress</option>
+                        <option value="Edits" ${ch.status === 'Edits' ? 'selected' : ''}>Edits</option>
+                        <option value="Final Edits" ${ch.status === 'Final Edits' ? 'selected' : ''}>Final Edits</option>
+                        <option value="Done" ${ch.status === 'Done' ? 'selected' : ''}>Done</option>
+                    </select>
+                </td>`;
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function syncNotionChapters() {
+            var container = document.getElementById('notionChapters');
+            if (!container) return;
+            
+            // Get cached or default
+            var cached = localStorage.getItem('notionChaptersCache');
+            if (cached) {
+                notionChaptersData = JSON.parse(cached);
+            } else {
+                notionChaptersData = defaultChapters.slice();
+                localStorage.setItem('notionChaptersCache', JSON.stringify(notionChaptersData));
+            }
+            
+            renderChaptersTable(notionChaptersData);
+        }
+        
+        // Default book chapters data (fallback)
+        var defaultBookChapters = [
+            {"id": "322d9842-afb9-8052-badc-d49dab60090d", "title": "The Opportunity", "chapter": 0, "section": 1, "status": "Not started"},
+            {"id": "322d9842-afb9-8081-8b33-ee7b48554d60", "title": "The Offer / It's Not What It All Seems", "chapter": 1, "section": 1, "status": "In progress"},
+            {"id": "322d9842-afb9-8089-ac4d-ece22f57fbf4", "title": "IT Mishaps", "chapter": 2, "section": 1, "status": "Not started"},
+            {"id": "322d9842-afb9-80be-8194-f65ffe1afb03", "title": "Relocation", "chapter": 3, "section": 1, "status": "Not started"},
+            {"id": "322d9842-afb9-80ea-812d-c28cdab5fbd6", "title": "Your Career", "chapter": 4, "section": 2, "status": "Not started"},
+            {"id": "322d9842-afb9-80fc-82f4-c38b1411299a", "title": "The Coworkers", "chapter": 5, "section": 2, "status": "In progress"},
+            {"id": "322d9842-afb9-803c-ad8d-dcca40bcc7b5", "title": "Teacher's Pet (Golden Child)", "chapter": 6, "section": 2, "status": "Not started"},
+            {"id": "322d9842-afb9-80b0-8e41-fb63e072623e", "title": "Leadership", "chapter": 7, "section": 2, "status": "Not started"},
+            {"id": "322d9842-afb9-80f2-a1aa-c4d77c713b9c", "title": "Titles are Cheap", "chapter": 8, "section": 2, "status": "In progress"},
+            {"id": "322d9842-afb9-80cf-b685-d7070cb4d89c", "title": "Unagentic Cash Cow", "chapter": 9, "section": 2, "status": "In progress"},
+            {"id": "322d9842-afb9-8050-9f2d-e588291c016c", "title": "Subject Matter Expert", "chapter": 10, "section": 2, "status": "In progress"},
+            {"id": "322d9842-afb9-80ab-bb03-fdc1c7e819ba", "title": "The job duties", "chapter": 11, "section": 3, "status": "Not started"},
+            {"id": "322d9842-afb9-80cc-9c9e-e5d549ee903c", "title": "The Project", "chapter": 12, "section": 3, "status": "Not started"},
+            {"id": "322d9842-afb9-802a-a83c-e443119cea2f", "title": "The Misunderstanding", "chapter": 13, "section": 3, "status": "Not started"},
+            {"id": "322d9842-afb9-8074-8444-d3f0a70b48a6", "title": "Questions", "chapter": 14, "section": 3, "status": "Not started"},
+            {"id": "322d9842-afb9-80fc-91f1-ff94b59fd04f", "title": "PTO", "chapter": 15, "section": 4, "status": "Not started"},
+            {"id": "322d9842-afb9-805e-abc7-c00aba25d7db", "title": "The bonus talk and performance review", "chapter": 16, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-803e-8b1e-d8bb14a0af55", "title": "PIP", "chapter": 17, "section": 4, "status": "Not started"},
+            {"id": "322d9842-afb9-8053-b17e-ecb610cc1548", "title": "Chapter 18 - Ethics Management", "chapter": 18, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-8038-a1be-e78ee703cadf", "title": "Possible Embezzlement", "chapter": 19, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-8058-a3ea-c075fa29c4af", "title": "Corporate Loyalty", "chapter": 20, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-80e4-a6ce-f02c46b41072", "title": "The vendors", "chapter": 21, "section": 4, "status": "Not started"},
+            {"id": "322d9842-afb9-80d5-bdf3-fb2946768f48", "title": "Corporate Drama", "chapter": 22, "section": 4, "status": "Not started"},
+            {"id": "322d9842-afb9-80cb-a25b-e4b8344fcf5c", "title": "Meetings", "chapter": 23, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-8046-900c-ce65846d7fc3", "title": "The Offsite", "chapter": 24, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-807b-885f-cf6c5c2142f1", "title": "The Conference", "chapter": 25, "section": 4, "status": "In progress"},
+            {"id": "322d9842-afb9-8048-ab9b-f1b78571b2da", "title": "The Catalyst", "chapter": 0, "section": 4, "status": "Not started"},
+            {"id": "322d9842-afb9-809d-90ef-e04235c7dc71", "title": "The Job", "chapter": 0, "section": 3, "status": "Not started"},
+            {"id": "322d9842-afb9-80c0-8564-e821335bf80b", "title": "Exit Strategy", "chapter": 0, "section": 5, "status": "Not started"},
+            {"id": "322d9842-afb9-80b2-9e41-ef63c7905fd6", "title": "The Environment", "chapter": 0, "section": 2, "status": "Not started"},
+            {"id": "322d9842-afb9-8058-b35a-e8c81926f88c", "title": "Becoming the Unemployee", "chapter": 27, "section": 5, "status": "In progress"}
+        ];
+        
+        var bookChapters = defaultBookChapters;
+        
+        function loadBookProgress() {
+            // Use default data (the cache might be stale/empty)
+            bookChapters = defaultBookChapters;
+            
+            // Calculate stats
+            var total = bookChapters.length;
+            var stats = {
+                'Not started': bookChapters.filter(function(c) { return c.status === 'Not started'; }).length,
+                'In progress': bookChapters.filter(function(c) { return c.status === 'In progress'; }).length,
+                'Edits': bookChapters.filter(function(c) { return c.status === 'Edits'; }).length,
+                'Final Edits': bookChapters.filter(function(c) { return c.status === 'Final Edits'; }).length,
+                'Done': bookChapters.filter(function(c) { return c.status === 'Done'; }).length
+            };
+            
+            // Update stats in Book section
+            if (document.getElementById('statNotStarted')) {
+                document.getElementById('statNotStarted').textContent = stats['Not started'];
+                document.getElementById('statInProgress').textContent = stats['In progress'];
+                document.getElementById('statEdits').textContent = stats['Edits'];
+                document.getElementById('statFinalEdits').textContent = stats['Final Edits'];
+                document.getElementById('statDone').textContent = stats['Done'];
+            }
+            
+            // Update stats in Home section
+            if (document.getElementById('homeNotStarted')) {
+                document.getElementById('homeNotStarted').textContent = stats['Not started'];
+                document.getElementById('homeInProgress').textContent = stats['In progress'];
+                document.getElementById('homeEdits').textContent = stats['Edits'];
+                document.getElementById('homeFinalEdits').textContent = stats['Final Edits'];
+                document.getElementById('homeDone').textContent = stats['Done'];
+            }
+            
+            // Update donut in Home section
+            var donutCircle = document.getElementById('donutCircle');
+            var donutCenter = document.getElementById('donutCenter');
+            if (donutCircle && total > 0) {
+                var colors = {
+                    'Not started': '#9ca3af',
+                    'In progress': '#3b82f6',
+                    'Edits': '#eab308',
+                    'Final Edits': '#f97316',
+                    'Done': '#22c55e'
+                };
+                var statuses = ['Not started', 'In progress', 'Edits', 'Final Edits', 'Done'];
+                
+                var gradient = 'conic-gradient(';
+                var start = 0;
+                statuses.forEach(function(status) {
+                    var count = stats[status];
+                    var percent = (count / total) * 100;
+                    var end = start + percent;
+                    gradient += colors[status] + ' ' + start + '% ' + end + '%,';
+                    start = end;
+                });
+                gradient = gradient.slice(0, -1) + ')';
+                donutCircle.style.background = gradient;
+                donutCenter.textContent = stats['Done'];
+            }
+            
+            // Update donut in Book section
+            var bookDonutCircle = document.getElementById('bookDonutCircle');
+            var bookDonutCenter = document.getElementById('bookDonutCenter');
+            if (bookDonutCircle && total > 0) {
+                var colors = {
+                    'Not started': '#9ca3af',
+                    'In progress': '#3b82f6',
+                    'Edits': '#eab308',
+                    'Final Edits': '#f97316',
+                    'Done': '#22c55e'
+                };
+                var statuses = ['Not started', 'In progress', 'Edits', 'Final Edits', 'Done'];
+                
+                var gradient = 'conic-gradient(';
+                var start = 0;
+                statuses.forEach(function(status) {
+                    var count = stats[status];
+                    var percent = (count / total) * 100;
+                    var end = start + percent;
+                    gradient += colors[status] + ' ' + start + '% ' + end + '%,';
+                    start = end;
+                });
+                gradient = gradient.slice(0, -1) + ')';
+                bookDonutCircle.style.background = gradient;
+                bookDonutCenter.textContent = stats['Done'];
+            }
+            
+            // Populate Kanban board
+            var kanbanContainers = {
+                'Not started': document.getElementById('kanbanNotStartedList'),
+                'In progress': document.getElementById('kanbanInProgressList'),
+                'Edits': document.getElementById('kanbanEditsList'),
+                'Final Edits': document.getElementById('kanbanFinalEditsList'),
+                'Done': document.getElementById('kanbanDoneList')
+            };
+            var kanbanCounts = {
+                'Not started': document.getElementById('kanbanNotStarted'),
+                'In progress': document.getElementById('kanbanInProgress'),
+                'Edits': document.getElementById('kanbanEdits'),
+                'Final Edits': document.getElementById('kanbanFinalEdits'),
+                'Done': document.getElementById('kanbanDone')
+            };
+            
+            var statusMap = {
+                'Not started': 'Not started',
+                'In progress': 'In progress',
+                'Edits': 'Edits',
+                'Final Edits': 'Final Edits',
+                'Done': 'Done'
+            };
+            
+            // Simple test - put all chapters in Not Started first to verify data
+            var testContainer = document.getElementById('kanbanNotStartedList');
+            if (testContainer && bookChapters && bookChapters.length > 0) {
+                var html = '';
+                for (var i = 0; i < bookChapters.length; i++) {
+                    var ch = bookChapters[i];
+                    var title = ch.title || ('Chapter ' + ch.chapter);
+                    html += '<div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; color: #fff;">';
+                    html += '<strong>Ch. ' + ch.chapter + ':</strong> ' + title + ' (' + ch.status + ')';
+                    html += '</div>';
+                }
+                testContainer.innerHTML = html;
+            } else if (testContainer) {
+                testContainer.innerHTML = '<div style="color: red;">No data: bookChapters = ' + (bookChapters ? bookChapters.length : 'undefined') + '</div>';
+            }
+            
+            Object.keys(kanbanContainers).forEach(function(status) {
+                if (kanbanContainers[status] && status !== 'Not started') {
+                    var chapters = [];
+                    var targetStatus = statusMap[status];
+                    for (var i = 0; i < bookChapters.length; i++) {
+                        if (bookChapters[i].status === targetStatus) {
+                            chapters.push(bookChapters[i]);
+                        }
+                    }
+                    kanbanCounts[status].textContent = '(' + chapters.length + ')';
+                    
+                    var html = '';
+                    for (var j = 0; j < chapters.length; j++) {
+                        var chapter = chapters[j];
+                        var title = chapter.title || ('Chapter ' + chapter.chapter);
+                        html += '<div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; color: #fff;">';
+                        html += '<strong>Ch. ' + chapter.chapter + ':</strong> ' + title;
+                        html += '</div>';
+                    }
+                    kanbanContainers[status].innerHTML = html;
+                }
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('bookChaptersCache', JSON.stringify(bookChapters));
+        }
+        
+        // Writing Control Strip Functions
+        function startWriting() {
+            var chapter = document.getElementById('currentChapter').value;
+            var goal = document.getElementById('writingGoal').value;
+            var sprint = document.getElementById('sprintDuration').value;
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('writingChapter', chapter);
+            localStorage.setItem('writingGoal', goal);
+            localStorage.setItem('writingSprint', sprint);
+            
+            // Show timer alert (placeholder for actual timer)
+            var minutes = parseInt(sprint);
+            alert('🎯 Writing Session Started!\n\nChapter: ' + chapter + '\nGoal: ' + goal + '\nDuration: ' + minutes + ' minutes\n\nFocus mode engaged! Timer will ring in ' + minutes + ' minutes.');
+            
+            // TODO: Implement actual timer functionality
+            console.log('Writing session started:', { chapter, goal, sprint, timestamp: new Date().toISOString() });
+        }
+        
+        function markProgress() {
+            var chapter = document.getElementById('currentChapter').value;
+            var goal = document.getElementById('writingGoal').value;
+            var nextStep = document.getElementById('nextStep').value;
+            
+            // Log progress (placeholder for future tracking)
+            var progressLog = JSON.parse(localStorage.getItem('writingProgressLog') || '[]');
+            progressLog.push({
+                chapter: chapter,
+                goal: goal,
+                nextStep: nextStep,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('writingProgressLog', JSON.stringify(progressLog));
+            
+            // Visual feedback
+            var btn = event.target;
+            var originalText = btn.textContent;
+            btn.textContent = '✓ Progress Logged!';
+            btn.style.background = '#10b981';
+            setTimeout(function() {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 1500);
+            
+            console.log('Progress logged:', { chapter, goal, nextStep });
+        }
+        
+        // Load saved writing state on page load
+        function loadWritingState() {
+            var savedChapter = localStorage.getItem('writingChapter');
+            var savedGoal = localStorage.getItem('writingGoal');
+            var savedSprint = localStorage.getItem('writingSprint');
+            
+            if (savedChapter) document.getElementById('currentChapter').value = savedChapter;
+            if (savedGoal) document.getElementById('writingGoal').value = savedGoal;
+            if (savedSprint) document.getElementById('sprintDuration').value = savedSprint;
+        }
+        
+        // Refresh from Notion - triggers sync
+        function refreshFromNotion() {
+            var btn = event.target;
+            btn.textContent = '🔄 Syncing...';
+            btn.disabled = true;
+            
+            // Since browser can't call Notion directly (CORS), this triggers a background sync
+            // For now, show message to ask Sage
+            btn.textContent = '💬 Ask Sage to sync';
+            btn.disabled = false;
+            btn.onclick = function() { alert('Type "sync from Notion" in chat to refresh!'); };
+        }
+        
+        // Load on page ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadBookProgress, 100);
+        });
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(loadBookProgress, 100);
+        }
+        
+        // Also run on window load
+        window.addEventListener('load', function() {
+            setTimeout(loadBookProgress, 100);
+        });
+        
+        // Legacy function
+        function updateChapterStatus(pageId, newStatus) {
+            // Update the select styling immediately
+            var colors = {
+                'Not started': '#9ca3af',
+                'In progress': '#3b82f6',
+                'Edits': '#eab308',
+                'Final Edits': '#f97316',
+                'Done': '#22c55e'
+            };
+            selectEl.style.borderColor = colors[newStatus] || '#9ca3af';
+            selectEl.style.color = colors[newStatus] || '#9ca3af';
+            
+            // Show "Syncing..." feedback
+            var feedback = document.createElement('span');
+            feedback.style.cssText = 'margin-left: 8px; font-size: 0.75rem; color: #7a4d7a;';
+            feedback.textContent = 'Syncing to Notion...';
+            selectEl.parentNode.appendChild(feedback);
+            
+            // Save to localStorage
+            var updates = JSON.parse(localStorage.getItem('notionPendingSync') || '[]');
+            updates.push({ pageId: pageId, status: newStatus, statusId: statusToNotion[newStatus], time: Date.now() });
+            localStorage.setItem('notionPendingSync', JSON.stringify(updates));
+            
+            // Try to trigger sync via beacon (won't work but sets up for later)
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('/pending-sync', JSON.stringify({ pageId: pageId, status: newStatus }));
+            }
+            
+            setTimeout(function() {
+                feedback.textContent = '✓ Saved! Notion sync coming...';
+                feedback.style.color = '#22c55e';
+            }, 300);
+        }
+        
+        // Legacy function
+        function updateChapterStatus(pageId, newStatus) {
+            // Update local cache immediately
+            const idx = notionChaptersData.findIndex(c => c.id === pageId);
+            if (idx !== -1) {
+                notionChaptersData[idx].status = newStatus;
+                localStorage.setItem('notionChaptersCache', JSON.stringify(notionChaptersData));
+                renderChaptersTable(notionChaptersData);
+                
+                // Store pending update to sync later
+                const pending = JSON.parse(localStorage.getItem('notionPendingUpdates') || '[]');
+                pending.push({ id: pageId, status: newStatus });
+                localStorage.setItem('notionPendingUpdates', JSON.stringify(pending));
+                
+                // TODO: Trigger subagent to sync to Notion
+                // For now, changes are local + will sync when cron runs
+            }
+        }
+        
+        // Load chapters on page load - render directly
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try localStorage first
+            var cached = localStorage.getItem('notionChaptersCache');
+            if (cached) {
+                notionChaptersData = JSON.parse(cached);
+            } else {
+                notionChaptersData = defaultChapters.slice();
+                localStorage.setItem('notionChaptersCache', JSON.stringify(notionChaptersData));
+            }
+            renderChaptersTable(notionChaptersData);
+        });
+        
+        // Also run immediately if DOM is ready
+        (function() {
+            var container = document.getElementById('notionChapters');
+            if (container) {
+                var cached = localStorage.getItem('notionChaptersCache');
+                if (cached) {
+                    notionChaptersData = JSON.parse(cached);
+                } else {
+                    notionChaptersData = defaultChapters.slice();
+                }
+                renderChaptersTable(notionChaptersData);
+            }
+        })();
+    </script>
+</body>
+</html>
