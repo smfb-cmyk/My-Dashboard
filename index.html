@@ -1424,14 +1424,30 @@
             const saved = localStorage.getItem(DAILY_PLAN_KEY);
             if (saved) {
                 const data = JSON.parse(saved);
+
+                // Always normalize IDs and sort before rendering
+                data.priorities.forEach((block, idx) => {
+                    if (typeof block.id !== 'number') {
+                        block.id = 1743000000000 + idx;
+                    }
+                });
+                data.priorities.sort((a, b) => {
+                    const timeA = a.block.split(' - ')[0].trim();
+                    const timeB = b.block.split(' - ')[0].trim();
+                    const dateA = new Date('2000/01/01 ' + timeA);
+                    const dateB = new Date('2000/01/01 ' + timeB);
+                    return dateA - dateB;
+                });
+
+                localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
                 renderDailyPlan(data);
             } else {
                 document.getElementById('missionText').textContent = 'No plan for today yet. Ask Sage to set up the day!';
             }
 
-            // Fetch fresh from GitHub in background (if new day)
+            // Fetch fresh from GitHub if new day (to sync with server)
             if (savedDate !== today) {
-                fetchDailyPlanFromGit(); // fire and forget
+                fetchDailyPlanFromGit();
             }
         }
 
