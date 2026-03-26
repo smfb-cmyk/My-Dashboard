@@ -1424,15 +1424,6 @@
             const saved = localStorage.getItem(DAILY_PLAN_KEY);
             if (saved) {
                 const data = JSON.parse(saved);
-
-                // Normalize all IDs to numbers (fixes legacy data)
-                data.priorities.forEach((block, idx) => {
-                    if (typeof block.id !== 'number') {
-                        block.id = Date.now() + idx;
-                    }
-                });
-                localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
-
                 renderDailyPlan(data);
             } else {
                 document.getElementById('missionText').textContent = 'No plan for today yet. Ask Sage to set up the day!';
@@ -1489,7 +1480,7 @@
                 }
             });
 
-            // Sort priorities chronologically by start time (DON'T reassign IDs when sorting)
+            // Sort priorities chronologically by start time and SAVE the sorted order
             data.priorities.sort((a, b) => {
                 const timeA = a.block.split(' - ')[0].trim();
                 const timeB = b.block.split(' - ')[0].trim();
@@ -1497,6 +1488,7 @@
                 const dateB = new Date('2000/01/01 ' + timeB);
                 return dateA - dateB;
             });
+            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
 
             data.priorities.forEach((block, idx) => {
                 totalTasks += block.tasks.length;
