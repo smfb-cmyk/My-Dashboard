@@ -1473,12 +1473,14 @@
             let totalTasks = 0;
             let completedTasks = 0;
 
-            // Assign IDs to any blocks missing them (for existing data)
+            // Assign unique IDs to blocks that don't have one (only done once when missing)
             data.priorities.forEach((block, idx) => {
-                if (!block.id) block.id = Date.now() + idx;
+                if (block.id === undefined || block.id === null || block.id === '') {
+                    block.id = 'block_' + Date.now() + '_' + idx;
+                }
             });
 
-            // Sort priorities chronologically by start time
+            // Sort priorities chronologically by start time (DON'T reassign IDs when sorting)
             data.priorities.sort((a, b) => {
                 const timeA = a.block.split(' - ')[0].trim();
                 const timeB = b.block.split(' - ')[0].trim();
@@ -1577,7 +1579,9 @@
         }
 
         function handleDragStart(e) {
-            draggedBlockId = parseInt(e.target.getAttribute('data-id'));
+            const el = e.target.closest('[data-id]');
+            if (!el) return;
+            draggedBlockId = el.getAttribute('data-id');
             e.target.style.opacity = '0.5';
         }
 
@@ -1588,13 +1592,15 @@
 
         function handleDrop(e) {
             e.preventDefault();
-            const dropBlockId = parseInt(e.target.closest('[data-id]').getAttribute('data-id'));
-            if (draggedBlockId === null || draggedBlockId === dropBlockId) return;
+            const dropEl = e.target.closest('[data-id]');
+            if (!dropEl) return;
+            const dropBlockId = dropEl.getAttribute('data-id');
+            if (!dropBlockId || draggedBlockId === null || String(draggedBlockId) === String(dropBlockId)) return;
 
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            const draggedIdx = data.priorities.findIndex(b => b.id === draggedBlockId);
-            const dropIdx = data.priorities.findIndex(b => b.id === dropBlockId);
-            if (draggedIdx === -1 || dropIdx === -1) return;
+            const draggedIdx = data.priorities.findIndex(b => String(b.id) === String(draggedBlockId));
+            const dropIdx = data.priorities.findIndex(b => String(b.id) === String(dropBlockId));
+            if (draggedIdx === -1 || dropIdx === -1 || draggedIdx === dropIdx) return;
 
             const [moved] = data.priorities.splice(draggedIdx, 1);
             data.priorities.splice(dropIdx, 0, moved);
@@ -1664,9 +1670,8 @@
         }
 
         function deleteBlock(blockId) {
-            if (!confirm('Delete this block?')) return;
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            data.priorities = data.priorities.filter(b => b.id !== blockId);
+            data.priorities = data.priorities.filter(b => String(b.id) !== String(blockId));
             localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
             renderDailyPlan(data);
         }
