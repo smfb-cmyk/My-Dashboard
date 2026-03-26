@@ -572,12 +572,32 @@
                 "The only way to do great work is to love what you do."
                 <span class="author">— Steve Jobs</span>
             </div>
-            
+
+            <!-- Date/Weather Header Bar -->
+            <div id="dateWeatherBar" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 30px; border: 1px solid rgba(255,255,255,0.3);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">☀️</span>
+                    <div>
+                        <div id="headerTemp" style="font-size: 1.2rem; font-weight: 600; color: #5a2d5a;">65°F</div>
+                        <div id="headerWeather" style="font-size: 0.8rem; color: #7a4d7a;">Loading...</div>
+                    </div>
+                </div>
+                <div style="width: 1px; height: 30px; background: rgba(196,69,105,0.3);"></div>
+                <div>
+                    <div id="headerDate" style="font-size: 1rem; font-weight: 600; color: #5a2d5a;">Thursday, March 26, 2026</div>
+                    <div id="headerDay" style="font-size: 0.85rem; color: #7a4d7a;">Friday</div>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button onclick="showAddBlockModal()" style="background: linear-gradient(135deg, #c44569, #6a0572); border: none; border-radius: 10px; padding: 10px 18px; color: #fff; font-weight: 500; cursor: pointer; font-size: 0.85rem;">➕ Add Block</button>
+                    <button onclick="enterEditMode()" id="editModeBtn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(196,69,105,0.3); border-radius: 10px; padding: 10px 18px; color: #5a2d5a; font-weight: 500; cursor: pointer; font-size: 0.85rem;">✏️ Edit Plan</button>
+                </div>
+            </div>
+
             <!-- Home Section -->
             <div class="section active" id="section-home">
                 <div class="grid">
                     <!-- Today's Mission (Auto-loaded from daily-plan.json) -->
-                    <div class="card" style="grid-column: span 2;">
+                    <div class="card" style="grid-column: span 3;">
                         <h3><span>🎯</span> Today's Mission <button onclick="refreshDailyPlan()" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; margin-left: 5px;">🔄</button></h3>
                         <p id="missionText" style="color: #7a4d7a; font-size: 1rem; margin-bottom: 15px; font-style: italic;">Loading today's plan...</p>
                         <div id="dailyPlanBlocks" style="display: flex; flex-direction: column; gap: 10px;">
@@ -588,11 +608,9 @@
                             <span id="planProgress" style="font-size: 0.85rem; color: #7a4d7a; font-weight: 500;"></span>
                         </div>
                     </div>
-                    
 
-                    
-                    <!-- Weather Card -->
-                    <div class="card">
+                    <!-- Weather Card (hidden, data moved to header bar) -->
+                    <div class="card" style="display: none;">
                         <h3><span>☀️</span> Weather</h3>
                         <div class="weather" id="weather">
                             <div class="weather-temp" id="weatherTemp" style="color: #5a2d5a;">65°F</div>
@@ -603,7 +621,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Quick Stats -->
                     <div class="card">
                         <h3><span>📊</span> Quick Stats</h3>
@@ -618,7 +636,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Book Progress -->
                     <div class="card" style="grid-column: span 1;">
                         <h3><span>📖</span> Book Progress</h3>
@@ -1318,18 +1336,23 @@
                 const descEl = document.getElementById('weatherDesc');
                 const dateEl = document.getElementById('weatherDate');
                 const dayEl = document.getElementById('weatherDay');
-                
+                const headerTemp = document.getElementById('headerTemp');
+                const headerWeather = document.getElementById('headerWeather');
+
                 if (tempEl) {
                     // Convert C to F
                     const tempF = Math.round((current.temperature * 9/5) + 32);
                     tempEl.textContent = tempF + '°F';
                     tempEl.style.color = '#5a2d5a';
+                    if (headerTemp) headerTemp.textContent = tempF + '°F';
                 }
                 if (descEl) {
                     // Map WMO codes to descriptions
                     const weatherCodes = {0: 'Clear', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast', 45: 'Fog', 48: 'Fog', 51: 'Drizzle', 53: 'Drizzle', 55: 'Drizzle', 61: 'Rain', 63: 'Rain', 65: 'Rain', 71: 'Snow', 73: 'Snow', 75: 'Snow', 80: 'Rain Showers', 81: 'Rain Showers', 82: 'Rain Showers', 95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Thunderstorm'};
-                    descEl.textContent = weatherCodes[current.weathercode] || 'Clear';
+                    const weatherDesc = weatherCodes[current.weathercode] || 'Clear';
+                    descEl.textContent = weatherDesc;
                     descEl.style.color = '#7a4d7a';
+                    if (headerWeather) headerWeather.textContent = weatherDesc;
                 }
                 
                 // Always update date and day on each fetch
@@ -1477,14 +1500,23 @@
 
                 blockEl.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span class="drag-handle" style="cursor: grab; color: #9a6d9a; font-size: 1.2rem; ${editMode ? '' : 'display:none;'}" title="Drag to reorder">☰</span>
                         <span style="font-size: 1.1rem;">${block.emoji}</span>
                         <span style="font-weight: 600; color: #5a2d5a; flex: 1;">${block.title}</span>
                         <span style="font-size: 0.75rem; color: #7a4d7a; background: rgba(196,69,105,0.15); padding: 3px 8px; border-radius: 10px;">${block.block}</span>
+                        <button onclick="editBlock(${idx})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; ${editMode ? '' : 'display:none;'}" title="Edit">✏️</button>
+                        <button onclick="deleteBlock(${idx})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #c44569; ${editMode ? '' : 'display:none;'}" title="Delete">🗑️</button>
                     </div>
                     <ul style="list-style: none; margin: 0; padding: 0;">
                         ${tasksHTML}
                     </ul>
                 `;
+                blockEl.setAttribute('data-idx', idx);
+                blockEl.setAttribute('draggable', editMode ? 'true' : 'false');
+                blockEl.addEventListener('dragstart', handleDragStart);
+                blockEl.addEventListener('dragover', handleDragOver);
+                blockEl.addEventListener('drop', handleDrop);
+                blockEl.addEventListener('dragend', handleDragEnd);
                 container.appendChild(blockEl);
             });
 
@@ -1514,6 +1546,123 @@
                 renderDailyPlan(JSON.parse(saved));
             }
         }
+
+        // === Edit Mode & Drag/Drop ===
+        let editMode = false;
+        let draggedIdx = null;
+
+        function enterEditMode() {
+            editMode = true;
+            document.getElementById('editModeBtn').textContent = '✅ Done Editing';
+            document.getElementById('editModeBtn').style.background = 'rgba(74, 222, 128, 0.2)';
+            document.getElementById('editModeBtn').style.color = '#22c55e';
+            renderDailyPlan(JSON.parse(localStorage.getItem(DAILY_PLAN_KEY)));
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.getElementById('editModeBtn').textContent = '✏️ Edit Plan';
+            document.getElementById('editModeBtn').style.background = 'rgba(255,255,255,0.15)';
+            document.getElementById('editModeBtn').style.color = '#5a2d5a';
+            renderDailyPlan(JSON.parse(localStorage.getItem(DAILY_PLAN_KEY)));
+        }
+
+        function handleDragStart(e) {
+            draggedIdx = parseInt(e.target.getAttribute('data-idx'));
+            e.target.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.target.style.transform = 'scale(1.02)';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropIdx = parseInt(e.target.closest('[data-idx]').getAttribute('data-idx'));
+            if (draggedIdx === null || draggedIdx === dropIdx) return;
+
+            const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
+            const [moved] = data.priorities.splice(draggedIdx, 1);
+            data.priorities.splice(dropIdx, 0, moved);
+            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+            renderDailyPlan(data);
+        }
+
+        function handleDragEnd(e) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'scale(1)';
+            draggedIdx = null;
+        }
+
+        function editBlock(idx) {
+            const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
+            const block = data.priorities[idx];
+
+            const newEmoji = prompt('Emoji:', block.emoji);
+            const newTitle = prompt('Title:', block.title);
+            const newBlock = prompt('Time (e.g. 10:00 AM - 12:00 PM):', block.block);
+            const newTasks = prompt('Tasks (comma-separated):', block.tasks.join(', '));
+
+            if (newTitle) block.title = newTitle;
+            if (newEmoji) block.emoji = newEmoji;
+            if (newBlock) block.block = newBlock;
+            if (newTasks) block.tasks = newTasks.split(',').map(t => t.trim()).filter(t => t);
+
+            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+            renderDailyPlan(data);
+        }
+
+        function deleteBlock(idx) {
+            if (!confirm('Delete this block?')) return;
+            const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
+            data.priorities.splice(idx, 1);
+            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+            renderDailyPlan(data);
+        }
+
+        function showAddBlockModal() {
+            const emoji = prompt('Emoji (e.g. 🚀):', '📌');
+            const title = prompt('Title:', 'New Task');
+            const block = prompt('Time:', '10:00 AM - 11:00 AM');
+            const tasks = prompt('Tasks (comma-separated):', 'Task 1, Task 2');
+
+            if (!title) return;
+
+            const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY) || '{"priorities":[]}');
+            data.priorities.push({
+                emoji: emoji || '📌',
+                title: title,
+                block: block || 'TBD',
+                tasks: tasks ? tasks.split(',').map(t => t.trim()).filter(t => t) : []
+            });
+            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+            renderDailyPlan(data);
+        }
+
+        // Update Edit button to toggle mode
+        document.getElementById('editModeBtn').addEventListener('click', function() {
+            if (editMode) {
+                exitEditMode();
+            } else {
+                enterEditMode();
+            }
+        });
+
+        // Sync header date with weather bar
+        function updateDateWeatherHeader() {
+            const now = new Date();
+            const dayOptions = { weekday: 'long' };
+            const dateOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            const headerDate = document.getElementById('headerDate');
+            const headerDay = document.getElementById('headerDay');
+
+            if (headerDate) headerDate.textContent = now.toLocaleDateString('en-US', dateOptions);
+            if (headerDay) headerDay.textContent = now.toLocaleDateString('en-US', dayOptions);
+        }
+
+        // Call on load and weather fetch
+        updateDateWeatherHeader();
 
         function refreshDailyPlan() {
             localStorage.removeItem(DAILY_PLAN_DATE_KEY);
