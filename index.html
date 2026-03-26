@@ -1442,7 +1442,23 @@
 
                 const data = await response.json();
 
-                // Save to localStorage
+                // Normalize IDs and SAVE before rendering
+                data.priorities.forEach((block, idx) => {
+                    if (typeof block.id !== 'number') {
+                        block.id = 1743000000000 + idx;
+                    }
+                });
+
+                // Sort before saving
+                data.priorities.sort((a, b) => {
+                    const timeA = a.block.split(' - ')[0].trim();
+                    const timeB = b.block.split(' - ')[0].trim();
+                    const dateA = new Date('2000/01/01 ' + timeA);
+                    const dateB = new Date('2000/01/01 ' + timeB);
+                    return dateA - dateB;
+                });
+
+                // Save sorted data to localStorage
                 localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
                 localStorage.setItem(DAILY_PLAN_DATE_KEY, new Date().toISOString().split('T')[0]);
 
