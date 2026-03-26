@@ -1520,7 +1520,6 @@
 
                 blockEl.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                        <span class="drag-handle" style="cursor: grab; color: #9a6d9a; font-size: 1.2rem; ${editMode ? '' : 'display:none;'}" title="Drag to reorder">☰</span>
                         <span style="font-size: 1.1rem;">${block.emoji}</span>
                         <span style="font-weight: 600; color: #5a2d5a; flex: 1;">${block.title}</span>
                         <span style="font-size: 0.75rem; color: #7a4d7a; background: rgba(196,69,105,0.15); padding: 3px 8px; border-radius: 10px;">${block.block}</span>
@@ -1532,11 +1531,6 @@
                     </ul>
                 `;
                 blockEl.setAttribute('data-id', block.id);
-                blockEl.setAttribute('draggable', editMode ? 'true' : 'false');
-                blockEl.addEventListener('dragstart', handleDragStart);
-                blockEl.addEventListener('dragover', handleDragOver);
-                blockEl.addEventListener('drop', handleDrop);
-                blockEl.addEventListener('dragend', handleDragEnd);
                 container.appendChild(blockEl);
             });
 
@@ -1567,9 +1561,8 @@
             }
         }
 
-        // === Edit Mode & Drag/Drop ===
+        // === Edit Mode ===
         let editMode = false;
-        let draggedBlockId = null;
 
         function enterEditMode() {
             editMode = true;
@@ -1585,42 +1578,6 @@
             document.getElementById('editModeBtn').style.background = 'rgba(255,255,255,0.15)';
             document.getElementById('editModeBtn').style.color = '#5a2d5a';
             renderDailyPlan(JSON.parse(localStorage.getItem(DAILY_PLAN_KEY)));
-        }
-
-        function handleDragStart(e) {
-            const el = e.target.closest('[data-id]');
-            if (!el) return;
-            draggedBlockId = el.getAttribute('data-id');
-            e.target.style.opacity = '0.5';
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.target.style.transform = 'scale(1.02)';
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            const dropEl = e.target.closest('[data-id]');
-            if (!dropEl) return;
-            const dropBlockId = dropEl.getAttribute('data-id');
-            if (!dropBlockId || draggedBlockId === null || String(draggedBlockId) === String(dropBlockId)) return;
-
-            const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            const draggedIdx = data.priorities.findIndex(b => String(b.id) === String(draggedBlockId));
-            const dropIdx = data.priorities.findIndex(b => String(b.id) === String(dropBlockId));
-            if (draggedIdx === -1 || dropIdx === -1 || draggedIdx === dropIdx) return;
-
-            const [moved] = data.priorities.splice(draggedIdx, 1);
-            data.priorities.splice(dropIdx, 0, moved);
-            localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
-            renderDailyPlan(data);
-        }
-
-        function handleDragEnd(e) {
-            e.target.style.opacity = '1';
-            e.target.style.transform = 'scale(1)';
-            draggedBlockId = null;
         }
 
         function editBlock(blockId) {
