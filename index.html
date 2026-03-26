@@ -1424,6 +1424,15 @@
             const saved = localStorage.getItem(DAILY_PLAN_KEY);
             if (saved) {
                 const data = JSON.parse(saved);
+
+                // Normalize all IDs to numbers (fixes legacy data)
+                data.priorities.forEach((block, idx) => {
+                    if (typeof block.id !== 'number') {
+                        block.id = Date.now() + idx;
+                    }
+                });
+                localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+
                 renderDailyPlan(data);
             } else {
                 document.getElementById('missionText').textContent = 'No plan for today yet. Ask Sage to set up the day!';
@@ -1473,10 +1482,10 @@
             let totalTasks = 0;
             let completedTasks = 0;
 
-            // Assign unique IDs to blocks that don't have one (only done once when missing)
+            // Normalize all block IDs to numbers (fixes old string IDs)
             data.priorities.forEach((block, idx) => {
-                if (block.id === undefined || block.id === null || block.id === '') {
-                    block.id = 'block_' + Date.now() + '_' + idx;
+                if (typeof block.id !== 'number') {
+                    block.id = Date.now() + idx;
                 }
             });
 
@@ -1515,8 +1524,8 @@
                         <span style="font-size: 1.1rem;">${block.emoji}</span>
                         <span style="font-weight: 600; color: #5a2d5a; flex: 1;">${block.title}</span>
                         <span style="font-size: 0.75rem; color: #7a4d7a; background: rgba(196,69,105,0.15); padding: 3px 8px; border-radius: 10px;">${block.block}</span>
-                        <button onclick="editBlock('${block.id}')" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; ${editMode ? '' : 'display:none;'}" title="Edit">✏️</button>
-                        <button onclick="deleteBlock('${block.id}')" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #c44569; ${editMode ? '' : 'display:none;'}" title="Delete">🗑️</button>
+                        <button onclick="editBlock(${block.id})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; ${editMode ? '' : 'display:none;'}" title="Edit">✏️</button>
+                        <button onclick="deleteBlock(${block.id})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #c44569; ${editMode ? '' : 'display:none;'}" title="Delete">🗑️</button>
                     </div>
                     <ul style="list-style: none; margin: 0; padding: 0;">
                         ${tasksHTML}
@@ -1644,8 +1653,8 @@
                         <textarea id="editTasks" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; min-height: 80px; resize: vertical;">${block.tasks.join('\n')}</textarea>
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <button onclick="cancelEdit('${blockId}')" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; cursor: pointer;">Cancel</button>
-                        <button onclick="saveEdit('${blockId}')" style="padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c44569, #6a0572); color: #fff; cursor: pointer;">Save</button>
+                        <button onclick="cancelEdit(${blockId})" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; cursor: pointer;">Cancel</button>
+                        <button onclick="saveEdit(${blockId})" style="padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c44569, #6a0572); color: #fff; cursor: pointer;">Save</button>
                     </div>
                 </div>
             `;
