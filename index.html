@@ -1506,7 +1506,7 @@
 
                 let tasksHTML = '';
                 block.tasks.forEach((task, tIdx) => {
-                    const taskId = `plan-task-${idx}-${tIdx}`;
+                    const taskId = `plan-task-${block.id}-${tIdx}`;
                     const isChecked = localStorage.getItem(taskId) === 'true';
                     if (isChecked) completedTasks++;
 
