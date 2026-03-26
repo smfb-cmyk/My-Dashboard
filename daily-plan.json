@@ -4,8 +4,8 @@
   "mission": "Get Tesseract moving, get Alpha bot back on track, level up the stock system, and come home to a clean house.",
   "priorities": [
     {
-      "id": 1,
-      "emoji": "🚀",
+      "id": 1743000000000,
+      "emoji": "\ud83d\ude80",
       "title": "Tesseract",
       "block": "10:00 AM - 1:00 PM",
       "tasks": [
@@ -17,8 +17,8 @@
       "done": false
     },
     {
-      "id": 2,
-      "emoji": "📈",
+      "id": 1743000000001,
+      "emoji": "\ud83d\udcc8",
       "title": "Stock System",
       "block": "2:00 PM - 3:00 PM",
       "tasks": [
@@ -28,8 +28,8 @@
       "done": false
     },
     {
-      "id": 3,
-      "emoji": "🤖",
+      "id": 1743000000002,
+      "emoji": "\ud83e\udd16",
       "title": "Alpha Bot",
       "block": "6:00 PM - 7:00 PM",
       "tasks": [
@@ -39,8 +39,8 @@
       "done": false
     },
     {
-      "id": 4,
-      "emoji": "🏠",
+      "id": 1743000000003,
+      "emoji": "\ud83c\udfe0",
       "title": "House Clean",
       "block": "3:00 PM - 4:00 PM",
       "tasks": [
@@ -49,8 +49,8 @@
       "done": false
     },
     {
-      "id": 5,
-      "emoji": "🏋️",
+      "id": 1743000000004,
+      "emoji": "\ud83c\udfcb\ufe0f",
       "title": "Gym with Christian",
       "block": "5:00 PM - 6:00 PM",
       "tasks": [
@@ -59,8 +59,8 @@
       "done": false
     },
     {
-      "id": 6,
-      "emoji": "🍽️",
+      "id": 1743000000005,
+      "emoji": "\ud83c\udf7d\ufe0f",
       "title": "Break / Dinner",
       "block": "4:00 PM - 5:00 PM",
       "tasks": [
@@ -70,6 +70,6 @@
     }
   ],
   "book": {
-    "note": "Weekly focus — not today's priority"
+    "note": "Weekly focus \u2014 not today's priority"
   }
 }
