@@ -1473,6 +1473,11 @@
             let totalTasks = 0;
             let completedTasks = 0;
 
+            // Assign IDs to any blocks missing them (for existing data)
+            data.priorities.forEach((block, idx) => {
+                if (!block.id) block.id = Date.now() + idx;
+            });
+
             // Sort priorities chronologically by start time
             data.priorities.sort((a, b) => {
                 const timeA = a.block.split(' - ')[0].trim();
@@ -1508,14 +1513,14 @@
                         <span style="font-size: 1.1rem;">${block.emoji}</span>
                         <span style="font-weight: 600; color: #5a2d5a; flex: 1;">${block.title}</span>
                         <span style="font-size: 0.75rem; color: #7a4d7a; background: rgba(196,69,105,0.15); padding: 3px 8px; border-radius: 10px;">${block.block}</span>
-                        <button onclick="editBlock(${idx})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; ${editMode ? '' : 'display:none;'}" title="Edit">✏️</button>
-                        <button onclick="deleteBlock(${idx})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #c44569; ${editMode ? '' : 'display:none;'}" title="Delete">🗑️</button>
+                        <button onclick="editBlock(${block.id})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; ${editMode ? '' : 'display:none;'}" title="Edit">✏️</button>
+                        <button onclick="deleteBlock(${block.id})" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #c44569; ${editMode ? '' : 'display:none;'}" title="Delete">🗑️</button>
                     </div>
                     <ul style="list-style: none; margin: 0; padding: 0;">
                         ${tasksHTML}
                     </ul>
                 `;
-                blockEl.setAttribute('data-idx', idx);
+                blockEl.setAttribute('data-id', block.id);
                 blockEl.setAttribute('draggable', editMode ? 'true' : 'false');
                 blockEl.addEventListener('dragstart', handleDragStart);
                 blockEl.addEventListener('dragover', handleDragOver);
@@ -1553,7 +1558,7 @@
 
         // === Edit Mode & Drag/Drop ===
         let editMode = false;
-        let draggedIdx = null;
+        let draggedBlockId = null;
 
         function enterEditMode() {
             editMode = true;
@@ -1565,14 +1570,14 @@
 
         function exitEditMode() {
             editMode = false;
-            document.getElementById('editModeBtn').textContent = '✏️ Edit Plan';
+            document.getElementById('editModeBtn').textContent = '✏️ Edit';
             document.getElementById('editModeBtn').style.background = 'rgba(255,255,255,0.15)';
             document.getElementById('editModeBtn').style.color = '#5a2d5a';
             renderDailyPlan(JSON.parse(localStorage.getItem(DAILY_PLAN_KEY)));
         }
 
         function handleDragStart(e) {
-            draggedIdx = parseInt(e.target.getAttribute('data-idx'));
+            draggedBlockId = parseInt(e.target.getAttribute('data-id'));
             e.target.style.opacity = '0.5';
         }
 
@@ -1583,10 +1588,14 @@
 
         function handleDrop(e) {
             e.preventDefault();
-            const dropIdx = parseInt(e.target.closest('[data-idx]').getAttribute('data-idx'));
-            if (draggedIdx === null || draggedIdx === dropIdx) return;
+            const dropBlockId = parseInt(e.target.closest('[data-id]').getAttribute('data-id'));
+            if (draggedBlockId === null || draggedBlockId === dropBlockId) return;
 
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
+            const draggedIdx = data.priorities.findIndex(b => b.id === draggedBlockId);
+            const dropIdx = data.priorities.findIndex(b => b.id === dropBlockId);
+            if (draggedIdx === -1 || dropIdx === -1) return;
+
             const [moved] = data.priorities.splice(draggedIdx, 1);
             data.priorities.splice(dropIdx, 0, moved);
             localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
@@ -1596,86 +1605,139 @@
         function handleDragEnd(e) {
             e.target.style.opacity = '1';
             e.target.style.transform = 'scale(1)';
-            draggedIdx = null;
+            draggedBlockId = null;
         }
 
-        function editBlock(idx) {
+        function editBlock(blockId) {
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            const block = data.priorities[idx];
+            const block = data.priorities.find(b => b.id === blockId);
+            if (!block) return;
 
-            // Create inline edit form
             const blocksContainer = document.getElementById('dailyPlanBlocks');
-            const blockEl = blocksContainer.querySelector(`[data-idx="${idx}"]`);
+            const blockEl = blocksContainer.querySelector(`[data-id="${blockId}"]`);
 
             blockEl.innerHTML = `
-                <div style="padding: 10px; background: rgba(255,255,255,0.2); border-radius: 10px;">
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 1;">
-                            <label style="font-size: 0.75rem; color: #7a4d7a;">Emoji</label>
+                <div style="padding: 12px; background: rgba(255,255,255,0.25); border-radius: 10px; border: 2px solid rgba(196,69,105,0.4);">
+                    <div style="font-weight: 600; color: #5a2d5a; margin-bottom: 10px;">✏️ Edit Block</div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <div style="flex: 0 0 60px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Emoji</label>
                             <input type="text" id="editEmoji" value="${block.emoji}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; font-size: 1rem;">
                         </div>
-                        <div style="flex: 3;">
-                            <label style="font-size: 0.75rem; color: #7a4d7a;">Title</label>
+                        <div style="flex: 2; min-width: 150px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Title</label>
                             <input type="text" id="editTitle" value="${block.title}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a;">
                         </div>
-                        <div style="flex: 2;">
-                            <label style="font-size: 0.75rem; color: #7a4d7a;">Time</label>
-                            <input type="text" id="editBlock" value="${block.block}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a;">
+                        <div style="flex: 1; min-width: 140px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Time</label>
+                            <input type="text" id="editBlockTime" value="${block.block}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a;">
                         </div>
                     </div>
                     <div style="margin-bottom: 10px;">
-                        <label style="font-size: 0.75rem; color: #7a4d7a;">Tasks (one per line)</label>
+                        <label style="font-size: 0.7rem; color: #7a4d7a;">Tasks (one per line)</label>
                         <textarea id="editTasks" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; min-height: 80px; resize: vertical;">${block.tasks.join('\n')}</textarea>
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <button onclick="cancelEdit(${idx})" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; cursor: pointer;">Cancel</button>
-                        <button onclick="saveEdit(${idx})" style="padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c44569, #6a0572); color: #fff; cursor: pointer;">Save</button>
+                        <button onclick="cancelEdit(${blockId})" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; cursor: pointer;">Cancel</button>
+                        <button onclick="saveEdit(${blockId})" style="padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c44569, #6a0572); color: #fff; cursor: pointer;">Save</button>
                     </div>
                 </div>
             `;
         }
 
-        function saveEdit(idx) {
+        function saveEdit(blockId) {
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            const block = data.priorities[idx];
+            const block = data.priorities.find(b => b.id === blockId);
+            if (!block) return;
 
             block.emoji = document.getElementById('editEmoji').value || '📌';
             block.title = document.getElementById('editTitle').value || 'Untitled';
-            block.block = document.getElementById('editBlock').value || 'TBD';
+            block.block = document.getElementById('editBlockTime').value || 'TBD';
             block.tasks = document.getElementById('editTasks').value.split('\n').map(t => t.trim()).filter(t => t);
 
             localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
             renderDailyPlan(data);
         }
 
-        function cancelEdit(idx) {
+        function cancelEdit(blockId) {
             renderDailyPlan(JSON.parse(localStorage.getItem(DAILY_PLAN_KEY)));
         }
 
-        function deleteBlock(idx) {
+        function deleteBlock(blockId) {
             if (!confirm('Delete this block?')) return;
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY));
-            data.priorities.splice(idx, 1);
+            data.priorities = data.priorities.filter(b => b.id !== blockId);
             localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
             renderDailyPlan(data);
         }
 
         function showAddBlockModal() {
-            const emoji = prompt('Emoji (e.g. 🚀):', '📌');
-            const title = prompt('Title:', 'New Task');
-            const block = prompt('Time:', '10:00 AM - 11:00 AM');
-            const tasks = prompt('Tasks (comma-separated):', 'Task 1, Task 2');
+            const blocksContainer = document.getElementById('dailyPlanBlocks');
 
-            if (!title) return;
+            // Show inline add form at top
+            blocksContainer.insertAdjacentHTML('afterbegin', `
+                <div id="addBlockForm" style="padding: 15px; background: rgba(255,255,255,0.25); border-radius: 12px; margin-bottom: 10px; border: 2px dashed rgba(196,69,105,0.4);">
+                    <div style="font-weight: 600; color: #5a2d5a; margin-bottom: 10px;">➕ Add New Block</div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <div style="flex: 0 0 60px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Emoji</label>
+                            <input type="text" id="addEmoji" value="📌" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; font-size: 1rem;">
+                        </div>
+                        <div style="flex: 2; min-width: 150px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Title</label>
+                            <input type="text" id="addTitle" placeholder="Task name" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a;">
+                        </div>
+                        <div style="flex: 1; min-width: 140px;">
+                            <label style="font-size: 0.7rem; color: #7a4d7a;">Time (e.g. 2PM - 3PM)</label>
+                            <input type="text" id="addBlock" placeholder="10 AM - 12 PM" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-size: 0.7rem; color: #7a4d7a;">Tasks (one per line)</label>
+                        <textarea id="addTasks" placeholder="Task 1&#10;Task 2&#10;Task 3" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; min-height: 60px; resize: vertical;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button onclick="cancelAddBlock()" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(196,69,105,0.3); background: rgba(255,255,255,0.1); color: #5a2d5a; cursor: pointer;">Cancel</button>
+                        <button onclick="saveAddBlock()" style="padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c44569, #6a0572); color: #fff; cursor: pointer;">Add Block</button>
+                    </div>
+                </div>
+            `);
+
+            // Focus title input
+            setTimeout(() => document.getElementById('addTitle')?.focus(), 50);
+        }
+
+        function cancelAddBlock() {
+            const form = document.getElementById('addBlockForm');
+            if (form) form.remove();
+        }
+
+        function saveAddBlock() {
+            const emoji = document.getElementById('addEmoji').value || '📌';
+            const title = document.getElementById('addTitle').value.trim();
+            const block = document.getElementById('addBlock').value || 'TBD';
+            const tasksText = document.getElementById('addTasks').value;
+
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
+            const tasks = tasksText ? tasksText.split('\n').map(t => t.trim()).filter(t => t) : [];
 
             const data = JSON.parse(localStorage.getItem(DAILY_PLAN_KEY) || '{"priorities":[]}');
+
+            // Add new block with unique ID
             data.priorities.push({
-                emoji: emoji || '📌',
+                id: Date.now(), // unique ID
+                emoji: emoji,
                 title: title,
-                block: block || 'TBD',
-                tasks: tasks ? tasks.split(',').map(t => t.trim()).filter(t => t) : []
+                block: block,
+                tasks: tasks
             });
+
             localStorage.setItem(DAILY_PLAN_KEY, JSON.stringify(data));
+            cancelAddBlock();
             renderDailyPlan(data);
         }
 
