@@ -589,27 +589,7 @@
                         </div>
                     </div>
                     
-                    <!-- Quick Wins -->
-                    <div class="card">
-                        <h3><span>🏆</span> Quick Wins</h3>
-                        <ul class="checklist" id="quickWinsList">
-                            <li style="display: flex; align-items: center; gap: 12px;">
-                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
-                                <span style="color: #5a2d5a;">🎓 Prep for GM Interview</span>
-                            </li>
-                            <li style="display: flex; align-items: center; gap: 12px;">
-                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
-                                <span style="color: #5a2d5a;">💳 Negotiate with AMEX on credit card plan</span>
-                            </li>
-                            <li style="display: flex; align-items: center; gap: 12px;">
-                                <input type="checkbox" onchange="toggleQuickWin(this)" style="width: 20px; height: 20px; accent-color: #c44569; cursor: pointer;">
-                                <span style="color: #5a2d5a;">👔 Prep clothes for Interview on Tuesday</span>
-                            </li>
-                        </ul>
-                        <p style="font-size: 0.85rem; color: #7a4d7a; margin-top: 15px; font-style: italic; text-align: center;">
-                            "Every small win counts! These are tasks you tackled even when they weren't on your list — that's what makes you unstoppable. 💪"
-                        </p>
-                    </div>
+
                     
                     <!-- Weather Card -->
                     <div class="card">
@@ -1465,6 +1445,15 @@
 
             let totalTasks = 0;
             let completedTasks = 0;
+
+            // Sort priorities chronologically by start time
+            data.priorities.sort((a, b) => {
+                const timeA = a.block.split(' - ')[0].trim();
+                const timeB = b.block.split(' - ')[0].trim();
+                const dateA = new Date('2000/01/01 ' + timeA);
+                const dateB = new Date('2000/01/01 ' + timeB);
+                return dateA - dateB;
+            });
 
             data.priorities.forEach((block, idx) => {
                 totalTasks += block.tasks.length;
