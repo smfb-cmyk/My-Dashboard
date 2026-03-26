@@ -1,0 +1,75 @@
+{
+  "date": "2026-03-26",
+  "day": "Thursday",
+  "mission": "Get Tesseract moving, get Alpha bot back on track, level up the stock system, and come home to a clean house.",
+  "priorities": [
+    {
+      "id": 1,
+      "emoji": "🚀",
+      "title": "Tesseract",
+      "block": "10:00 AM - 1:00 PM",
+      "tasks": [
+        "3-5 client outreach on Upwork",
+        "1 client outreach + creative analysis on Instagram",
+        "Continue building business model canvas",
+        "Google certification course"
+      ],
+      "done": false
+    },
+    {
+      "id": 2,
+      "emoji": "📈",
+      "title": "Stock System",
+      "block": "2:00 PM - 3:00 PM",
+      "tasks": [
+        "Feedback improvements",
+        "New system input"
+      ],
+      "done": false
+    },
+    {
+      "id": 3,
+      "emoji": "🤖",
+      "title": "Alpha Bot",
+      "block": "6:00 PM - 7:00 PM",
+      "tasks": [
+        "Connect to paid Helius API",
+        "Continue building bot"
+      ],
+      "done": false
+    },
+    {
+      "id": 4,
+      "emoji": "🏠",
+      "title": "House Clean",
+      "block": "3:00 PM - 4:00 PM",
+      "tasks": [
+        "Clean the house"
+      ],
+      "done": false
+    },
+    {
+      "id": 5,
+      "emoji": "🏋️",
+      "title": "Gym with Christian",
+      "block": "5:00 PM - 6:00 PM",
+      "tasks": [
+        "Work out with Christian"
+      ],
+      "done": false
+    },
+    {
+      "id": 6,
+      "emoji": "🍽️",
+      "title": "Break / Dinner",
+      "block": "4:00 PM - 5:00 PM",
+      "tasks": [
+        "Rest, decompress, eat"
+      ],
+      "done": false
+    }
+  ],
+  "book": {
+    "note": "Weekly focus — not today's priority"
+  }
+}
