@@ -1,69 +1,69 @@
 {
   "date": "2026-03-27",
   "day": "Friday",
-  "mission": "High priority legal stuff first, hike to decompress, then wrap up the week strong.",
+  "mission": "Legal stuff first thing, then get the hike in before noon. Everything else after.",
   "priorities": [
     {
-      "id": 1743002000001,
+      "id": 1743003000001,
       "emoji": "⚖️",
       "title": "Legal Filing Drop-Off",
-      "block": "9:00 AM - 11:00 AM",
+      "block": "9:00 AM - 10:00 AM",
       "tasks": [
-        "Drop off at office (may involve wait)",
-        "Confirm submission complete"
+        "Drop off at office",
+        "Confirm submission"
       ]
     },
     {
-      "id": 1743002000002,
+      "id": 1743003000002,
       "emoji": "📞",
       "title": "EEOC Call",
-      "block": "11:00 AM - 12:00 PM",
+      "block": "10:00 AM - 11:00 AM",
       "tasks": [
         "Make the call"
       ]
     },
     {
-      "id": 1743002000003,
+      "id": 1743003000003,
       "emoji": "🏔️",
       "title": "Hike",
-      "block": "12:00 PM - 3:00 PM",
+      "block": "11:00 AM - 12:30 PM",
       "tasks": [
-        "Get outside, move, decompress"
+        "Get outside before it gets hot"
       ]
     },
     {
-      "id": 1743002000004,
+      "id": 1743003000004,
       "emoji": "🍽️",
       "title": "Lunch / Decompress",
-      "block": "3:00 PM - 4:00 PM",
+      "block": "12:30 PM - 1:30 PM",
       "tasks": [
-        "Eat, rest after hike"
+        "Eat, rest"
       ]
     },
     {
-      "id": 1743002000005,
+      "id": 1743003000005,
       "emoji": "🚀",
       "title": "Tesseract",
-      "block": "4:00 PM - 6:00 PM",
+      "block": "1:30 PM - 4:00 PM",
       "tasks": [
-        "Agency work — Upwork outreach, business model canvas, or cert"
+        "Agency work — Upwork, business model, cert"
       ]
     },
     {
-      "id": 1743002000006,
+      "id": 1743003000006,
       "emoji": "🤖",
       "title": "Alpha Bot",
-      "block": "6:00 PM - 7:30 PM",
+      "block": "4:00 PM - 5:30 PM",
       "tasks": [
         "Connect paid Helius API",
         "Continue building"
       ]
     },
     {
-      "id": 1743002000007,
+      "id": 1743003000007,
       "emoji": "🏠",
       "title": "House Clean",
-      "block": "7:30 PM - 8:30 PM",
+      "block": "5:30 PM - 7:00 PM",
       "tasks": [
         "Clean the house"
       ]
