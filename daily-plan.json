@@ -1,75 +1,79 @@
 {
-  "date": "2026-03-26",
-  "day": "Thursday",
-  "mission": "Get Tesseract moving, get Alpha bot back on track, level up the stock system, and come home to a clean house.",
+  "date": "2026-03-27",
+  "day": "Friday",
+  "mission": "Keep the momentum going. Agency work, stock system, and wrap up what needs wrapping.",
   "priorities": [
     {
-      "id": 1743000000000,
-      "emoji": "\ud83d\ude80",
+      "id": 1743001000000,
+      "emoji": "🚀",
       "title": "Tesseract",
       "block": "10:00 AM - 1:00 PM",
       "tasks": [
-        "3-5 client outreach on Upwork",
-        "1 client outreach + creative analysis on Instagram",
-        "Continue building business model canvas",
-        "Google certification course"
-      ],
-      "done": false
+        "Finish business model canvas",
+        "3-5 Upwork client outreach",
+        "1 Instagram client analysis",
+        "Google certification (continue)"
+      ]
     },
     {
-      "id": 1743000000001,
-      "emoji": "\ud83d\udcc8",
+      "id": 1743001000001,
+      "emoji": "📈",
       "title": "Stock System",
-      "block": "2:00 PM - 3:00 PM",
+      "block": "1:00 PM - 2:30 PM",
       "tasks": [
-        "Feedback improvements",
-        "New system input"
-      ],
-      "done": false
+        "Feedback improvements from yesterday",
+        "New system input / backtest",
+        "Review overnight scan results"
+      ]
     },
     {
-      "id": 1743000000002,
-      "emoji": "\ud83e\udd16",
-      "title": "Alpha Bot",
-      "block": "6:00 PM - 7:00 PM",
-      "tasks": [
-        "Connect to paid Helius API",
-        "Continue building bot"
-      ],
-      "done": false
-    },
-    {
-      "id": 1743000000003,
-      "emoji": "\ud83c\udfe0",
+      "id": 1743001000002,
+      "emoji": "🏠",
       "title": "House Clean",
-      "block": "3:00 PM - 4:00 PM",
+      "block": "2:30 PM - 4:00 PM",
       "tasks": [
         "Clean the house"
-      ],
-      "done": false
+      ]
     },
     {
-      "id": 1743000000004,
-      "emoji": "\ud83c\udfcb\ufe0f",
-      "title": "Gym with Christian",
-      "block": "5:00 PM - 6:00 PM",
-      "tasks": [
-        "Work out with Christian"
-      ],
-      "done": false
-    },
-    {
-      "id": 1743000000005,
-      "emoji": "\ud83c\udf7d\ufe0f",
+      "id": 1743001000003,
+      "emoji": "🍽️",
       "title": "Break / Dinner",
       "block": "4:00 PM - 5:00 PM",
       "tasks": [
         "Rest, decompress, eat"
-      ],
-      "done": false
+      ]
+    },
+    {
+      "id": 1743001000004,
+      "emoji": "🏋️",
+      "title": "Gym with Christian",
+      "block": "5:00 PM - 6:00 PM",
+      "tasks": [
+        "Work out with Christian"
+      ]
+    },
+    {
+      "id": 1743001000005,
+      "emoji": "🤖",
+      "title": "Alpha Bot",
+      "block": "6:00 PM - 7:30 PM",
+      "tasks": [
+        "Connect to paid Helius API",
+        "Continue building bot"
+      ]
+    },
+    {
+      "id": 1743001000006,
+      "emoji": "📖",
+      "title": "Book",
+      "block": "8:00 PM - 9:00 PM",
+      "tasks": [
+        "Weekly book focus — 1 chapter"
+      ]
     }
   ],
   "book": {
-    "note": "Weekly focus \u2014 not today's priority"
+    "note": "Weekly focus — Friday evening block"
   }
 }
